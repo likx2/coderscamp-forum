@@ -21,6 +21,10 @@ const postSchema: Schema = new Schema({
     type: [String],
     required: true,
   },
+  date: {
+    type: Date,
+    default: Date.now()
+  }
 })
 
 export default model<Post>('Post', postSchema)
