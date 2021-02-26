@@ -5,4 +5,5 @@ export interface Comment extends Document {
   content: string
   likes: number
   dislikes: number
+  date: Date
 }

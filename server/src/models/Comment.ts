@@ -18,6 +18,10 @@ const commentSchema: Schema = new Schema({
     type: Number,
     required: true,
   },
+  date: {
+    type: Date,
+    default: Date.now()
+  }
 })
 
 export default model<Comment>('Comment', commentSchema)
