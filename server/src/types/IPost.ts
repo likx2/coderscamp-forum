@@ -1,6 +1,6 @@
 import { Document } from 'mongoose'
 
-export interface Post extends Document {
+export interface IPost extends Document {
   author: string
   title: string
   content: string

@@ -1,13 +1,21 @@
-import { Comment } from '../types/comment'
+import { IComment } from '../types/IComment'
 import { model, Schema } from 'mongoose'
 
 const commentSchema: Schema = new Schema({
   author: {
     ref: 'User',
     type: Schema.Types.ObjectId,
+    required: true
+  },
+  post: {
+    ref: 'Post',
+    type: Schema.Types.ObjectId,
+    required: true
   },
   content: {
     type: String,
+    minLength: 10,
+    maxLength: 500,
     required: true,
   },
   likes: {
@@ -17,11 +25,9 @@ const commentSchema: Schema = new Schema({
   dislikes: {
     type: Number,
     required: true,
-  },
-  date: {
-    type: Date,
-    default: Date.now()
   }
-})
+},
+  { timestamps: true })
 
-export default model<Comment>('Comment', commentSchema)
+const Comment = model<IComment>('Comment', commentSchema)
+export default Comment

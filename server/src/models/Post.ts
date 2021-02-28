@@ -1,30 +1,33 @@
-import { Post } from '../types/post'
+import { IPost } from '../types/IPost'
 import { model, Schema } from 'mongoose'
 
 const postSchema: Schema = new Schema({
   author: {
     ref: 'User',
     type: Schema.Types.ObjectId,
+    required: true
   },
   title: {
     type: String,
+    minLength: 10,
+    maxLength: 100,
     required: true,
   },
   content: {
     type: String,
+    minLength: 30,
+    maxLength: 5000,
     required: true,
   },
   imageUrl: {
-    type: String,
+    type: [String],
   },
   hashtags: {
     type: [String],
     required: true,
-  },
-  date: {
-    type: Date,
-    default: Date.now()
   }
-})
+},
+  { timestamps: true })
 
-export default model<Post>('Post', postSchema)
+const Post = model<IPost>('Post', postSchema)
+export default Post
