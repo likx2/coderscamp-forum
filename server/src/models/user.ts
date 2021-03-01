@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 import Joi from 'joi'
 import passwordComplexity from 'joi-password-complexity'
 
@@ -45,6 +45,15 @@ export function validateNewUser(user: object) {
     })
 
     return schema.validate(user)
+}
+
+export function validateLoginDetails(user: object) {
+    const schema = Joi.object({
+        login: Joi.string().required(),
+        password: Joi.string().required()
+    })
+
+    return schema.validate(user);
 }
 
 export const User = mongoose.model<IUser>('User', userSchema);
