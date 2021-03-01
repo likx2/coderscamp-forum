@@ -12,7 +12,7 @@ export default function auth(req: IAuthenticatedRequest, res: Response, next: Ne
 
     jwt.verify(authToken, process.env.JWT_PRIVATE_KEY!, (err, decoded) => {
         if (err) {
-            return res.status(400).send(err.message)
+            return res.status(401).send(err.message)
         }
 
         //Decode provided token
