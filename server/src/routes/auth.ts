@@ -1,13 +1,13 @@
 import mongoose from 'mongoose'
 import express from 'express'
 import bcrypt from 'bcrypt'
-import _ from 'lodash'
+import pick from 'lodash/pick'
 
-import { User, validateNewUser } from '../models/user'
+import { User, validateNewUser, validateLoginDetails } from '../models/user'
 
-const router = express.Router()
+const authReducer = express.Router()
 
-router.post('/register', async (req, res) => {
+authReducer.post('/register', async (req, res) => {
     //Check request validity
     const { error } = validateNewUser(req.body)
     if (error) {
@@ -27,7 +27,7 @@ router.post('/register', async (req, res) => {
     }
 
     //Register new user
-    let newUser = new User(_.pick(req.body, ['userName', 'email', 'password']))
+    const newUser = new User(pick(req.body, ['userName', 'email', 'password']))
 
     //Hash the password
     const saltRounds = 14
@@ -38,7 +38,7 @@ router.post('/register', async (req, res) => {
 
     await newUser.save()
 
-    return res.status(201).send(_.pick(newUser, ['_id', 'userName', 'email']))
+    return res.status(201).send(pick(newUser, ['_id', 'userName', 'email']))
 })
 
-export default router
+export default authReducer
