@@ -1,6 +1,8 @@
 import mongoose, { Schema } from 'mongoose'
 import Joi from 'joi'
 import passwordComplexity from 'joi-password-complexity'
+import jwt from 'jsonwebtoken'
+import pick from 'lodash/pick'
 
 import IUser from '../types/IUser'
 
@@ -27,6 +29,12 @@ const userSchema = new mongoose.Schema({
         required: [true, "can't be blank"],
     }
 })
+
+userSchema.methods.generateAuthToken = function(){
+
+    const jwtPrivateKey = process.env.JWT_PRIVATE_KEY!
+    return jwt.sign(pick(this, ['_id']), jwtPrivateKey)
+}
 
 export function validateNewUser(user: object) {
     const passwordComplexityOptions = {

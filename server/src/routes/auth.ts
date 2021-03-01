@@ -1,10 +1,8 @@
 import express from 'express'
 import bcrypt from 'bcrypt'
 import pick from 'lodash/pick'
-import jwt from 'jsonwebtoken'
 
 import { User, validateNewUser, validateLoginDetails } from '../models/user'
-import IUser from '../types/IUser'
 
 const authReducer = express.Router()
 
@@ -66,9 +64,7 @@ authReducer.post('/login', async (req, res) => {
     }
 
     //User authenticated!
-    //Prepare auth JWT
-    const jwtPrivateKey = process.env.JWT_PRIVATE_KEY!
-    const authToken = jwt.sign(pick(user, ['_id']), jwtPrivateKey)
+    const authToken = user.generateAuthToken()
 
     return res
         .status(200)
