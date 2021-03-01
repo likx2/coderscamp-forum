@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 import pick from 'lodash/pick'
 
 import IUser from '../types/IUser'
+import IAuthTokenPayload from '../types/IAuthTokenPayload'
 
 const userSchema = new mongoose.Schema({
     userName: {
@@ -33,7 +34,10 @@ const userSchema = new mongoose.Schema({
 userSchema.methods.generateAuthToken = function(){
 
     const jwtPrivateKey = process.env.JWT_PRIVATE_KEY!
-    return jwt.sign(pick(this, ['_id']), jwtPrivateKey)
+    const payload: IAuthTokenPayload = {
+        _id: this._id
+    }
+    return jwt.sign(payload, jwtPrivateKey)
 }
 
 export function validateNewUser(user: object) {
