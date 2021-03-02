@@ -1,33 +1,30 @@
-import { IComment } from '../types/IComment'
 import { model, Schema } from 'mongoose'
+import { Comment as CommentType } from '../types/Comment'
+import { Reaction } from '../types/Reaction'
 
-const commentSchema: Schema = new Schema({
-  author: {
-    ref: 'User',
-    type: Schema.Types.ObjectId,
-    required: true
+const commentSchema: Schema = new Schema(
+  {
+    author: {
+      ref: 'User',
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
+    post: {
+      ref: 'Post',
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
+    content: {
+      type: String,
+      minLength: 1,
+      maxLength: 500,
+      required: true,
+    },
+    reactions: {
+      type: [Reaction],
+    },
   },
-  post: {
-    ref: 'Post',
-    type: Schema.Types.ObjectId,
-    required: true
-  },
-  content: {
-    type: String,
-    minLength: 10,
-    maxLength: 500,
-    required: true,
-  },
-  likes: {
-    type: Number,
-    required: true,
-  },
-  dislikes: {
-    type: Number,
-    required: true,
-  }
-},
-  { timestamps: true })
+  { timestamps: true },
+)
 
-const Comment = model<IComment>('Comment', commentSchema)
-export default Comment
+export const Comment = model<CommentType>('Comment', commentSchema)

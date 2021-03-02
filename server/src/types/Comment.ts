@@ -1,6 +1,6 @@
 import { Document } from 'mongoose'
 
-export interface IComment extends Document {
+export interface Comment extends Document {
   author: string
   content: string
   likes: number
