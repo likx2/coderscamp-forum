@@ -3,9 +3,17 @@ import dotenv from 'dotenv'
 
 import startupDB from './startup/database'
 import startupRoutes from './startup/routes'
+import startupLogging from './startup/logging'
+import startupSettings from './startup/settings'
+
+//Startup logging
+startupLogging()
 
 //Config dotenv
 dotenv.config()
+
+//Startup settings
+startupSettings()
 
 //Startup database
 startupDB();

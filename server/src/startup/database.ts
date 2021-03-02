@@ -10,7 +10,11 @@ export default function startupDB() {
     const uri: string = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@cc-forum.4k1nv.mongodb.net/${MONGO_DB}?retryWrites=true&w=majority`
 
     //Connection otions
-    const options = { useNewUrlParser: true, useUnifiedTopology: true }
+    const options = {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+    }
     mongoose.set('useFindAndModify', false)
 
     //Connect to DB
