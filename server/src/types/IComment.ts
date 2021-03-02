@@ -5,5 +5,4 @@ export interface IComment extends Document {
   content: string
   likes: number
   dislikes: number
-  date: Date
 }

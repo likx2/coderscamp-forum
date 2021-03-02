@@ -6,5 +6,4 @@ export interface IPost extends Document {
   content: string
   imageUrl: string
   hashtags: string[]
-  date: Date
 }
