@@ -18,9 +18,10 @@
     "import/extensions": "off",
     "import/no-default-export": "error",
     "import/prefer-default-export": "off",
-    "no-console": "error",
+    "no-console": "off",
     "no-underscore-dangle": "off",
-    "no-unused-vars": "off"
+    "no-unused-vars": "off",
+    "consistent-return": "off"
   },
   "settings": {
     "import/resolver": {
