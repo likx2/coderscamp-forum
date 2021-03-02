@@ -1,3 +1,3 @@
-export default interface AuthTokenPayload{
-    _id: string
+export interface AuthTokenPayload {
+  _id: string
 }

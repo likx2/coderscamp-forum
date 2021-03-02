@@ -1,28 +1,27 @@
 import express, { Express } from 'express'
 import dotenv from 'dotenv'
 
-import startupDB from './startup/database'
-import startupRoutes from './startup/routes'
-import startupLogging from './startup/logging'
-import startupSettings from './startup/settings'
+import { startupDB } from './startup/database'
+import { startupRoutes } from './startup/routes'
+import { startupLogging } from './startup/logging'
+import { startupSettings } from './startup/settings'
 
-//Startup logging
+// Startup logging
 startupLogging()
 
-//Config dotenv
+// Config dotenv
 dotenv.config()
 
-//Startup settings
+// Startup settings
 startupSettings()
 
-//Startup database
-startupDB();
+// Startup database
+startupDB()
 
-//Startup routes
+// Startup routes
 const app: Express = express()
-startupRoutes(app);
+startupRoutes(app)
 
-//Run server
+// Run server
 const PORT: string | number = process.env.PORT || 4000
-app.listen(PORT, () =>
-    console.log(`Server running on http://localhost:${PORT}`))
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`))
