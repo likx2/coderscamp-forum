@@ -1,4 +1,3 @@
-import mongoose from 'mongoose'
 import express from 'express'
 import bcrypt from 'bcrypt'
 import pick from 'lodash/pick'
@@ -39,6 +38,38 @@ authReducer.post('/register', async (req, res) => {
     await newUser.save()
 
     return res.status(201).send(pick(newUser, ['_id', 'userName', 'email']))
+})
+
+authReducer.post('/login', async (req, res) => {
+    //Check if request is valid
+    const { error } = validateLoginDetails(req.body)
+    if (error) {
+        return res.status(400).send(error.details[0].message)
+    }
+
+    //Try find user by email
+    let user = await User.findOne({ email: req.body.login })
+    if (!user) {
+        //If we can not find user by email address try again using user name
+        user = await User.findOne({ userName: req.body.login })
+        if (!user) {
+            return res.status(400).send('Invalid login or password!')
+        }
+    }
+
+    //Compare password
+    const isPasswordValid = await bcrypt.compare(req.body.password, user.password)
+    if (!isPasswordValid) {
+        return res.status(400).send('Invalid login or password!')
+    }
+
+    //User authenticated!
+    const authToken = user.generateAuthToken()
+
+    return res
+        .status(200)
+        .header('x-auth-token', authToken)
+        .send(pick(user, ['userName', 'email']))
 })
 
 export default authReducer

@@ -1,8 +1,10 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 import Joi from 'joi'
 import passwordComplexity from 'joi-password-complexity'
+import jwt from 'jsonwebtoken'
 
-import IUser from '../types/IUser'
+import IUser from '../types/User'
+import AuthTokenPayload from '../types/AuthTokenPayload'
 
 const userSchema = new mongoose.Schema({
     userName: {
@@ -28,6 +30,15 @@ const userSchema = new mongoose.Schema({
     }
 })
 
+userSchema.methods.generateAuthToken = function(){
+
+    const jwtPrivateKey = process.env.JWT_PRIVATE_KEY!
+    const payload: AuthTokenPayload = {
+        _id: this._id
+    }
+    return jwt.sign(payload, jwtPrivateKey)
+}
+
 export function validateNewUser(user: object) {
     const passwordComplexityOptions = {
         min: 8,
@@ -45,6 +56,15 @@ export function validateNewUser(user: object) {
     })
 
     return schema.validate(user)
+}
+
+export function validateLoginDetails(user: object) {
+    const schema = Joi.object({
+        login: Joi.string().required(),
+        password: Joi.string().required()
+    })
+
+    return schema.validate(user);
 }
 
 export const User = mongoose.model<IUser>('User', userSchema);
