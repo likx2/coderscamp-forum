@@ -1,71 +1,59 @@
 import { Request, Response, Router } from 'express'
-import { Post } from '../models/Post'
+import { Post, validateNewPost } from '../models/Post'
+import { auth } from '../middleware/auth'
+import jwt from 'jsonwebtoken'
+import { values } from 'lodash'
 
 const router = Router()
 
-router.get('/', async (req: Request, res: Response) => {
-  const posts = await Post.find({})
-
-  //return 10 posts and sort by title
-  // const posts = await Post
-  //     .find({})
-  //     .limit(10)
-  //     .sort({title: 1})
-
-  res.send(posts)
-})
-
-// router.get('/hashtag/:hashtag', async (req: Request, res: Response) => {
-//   const hashtag = req.params.hashtag
-//   const posts = await Post.find({ hashtags: `${hashtag}` })
-//   res.send(posts)
-// })
-
-router.get('/:id', async (req: Request, res: Response) => {
+router.get('/:id', auth, async (req: Request, res: Response) => {
   const id = req.params.id
-  const post = await Post.find({ _id: id })
-  res.send(post)
+  await Post.find({ _id: id })
+    .then((post) => {
+      res.status(200).send(post)
+    })
+    .catch((err) => {
+      res.status(404).send(err)
+    })
 })
 
-router.post('/', async (req: Request, res: Response) => {
-  const hashtags = req.body.hashtags.split(' ')
+router.post('/', auth, async (req: Request, res: Response) => {
+  const token: string = req.header('x-auth-token')!
+  const userID = jwt.verify(token, process.env.JWT_PRIVATE_KEY!)
+
+  const { error, value } = validateNewPost(req.body)
+  if (error) {
+    return res.status(400).send(error.details[0].message)
+  }
+
   const newPost = new Post({
-    // author: 'Wojtek',
-    title: req.body.title,
-    content: req.body.content,
-    imageUrl: req.body.imageUrl,
-    hashtags: hashtags,
+    ...value,
+    author: userID,
   })
 
-  router.put('/:id', async (req: Request, res: Response) => {
-    const { id } = req.params
-    // const hashtags = req.body.hashtags.split(' ')
-    const updatedPost = await Post.findByIdAndUpdate(
-      id,
-      {
-        title: req.body.title,
-        content: req.body.content,
-        imageUrl: req.body.imageUrl,
-        // hashtags: hashtags,
-      },
-      { new: true },
-    )
-
-    // redirect???
-    res.send(updatedPost)
+  newPost.save((err) => {
+    if (err) {
+      res.status(401).send(err)
+    }
+    res.status(201).send(newPost)
   })
+})
 
-  router.delete('/:id', async (req, res) => {
-    const { id } = req.params
-    await Post.findByIdAndDelete(id)
+router.put('/:id', auth, async (req: Request, res: Response) => {
+  const { id } = req.params
+  const { error, value } = validateNewPost(req.body)
+  if (error) {
+    return res.status(400).send(error.details[0].message)
+  }
+  const updatedPost = await Post.findByIdAndUpdate(id, { ...value }, { new: true })
+  res.status(200).send(updatedPost)
+})
 
-    // redirect???
-    res.send('Post deleted')
-  })
-
-  await newPost.save()
-  res.send(newPost)
-  console.log('new post added')
+router.delete('/:id', auth, async (req, res) => {
+  const { id } = req.params
+  await Post.findByIdAndDelete(id)
+    .then(() => res.status(201).send('Post deleted'))
+    .catch((err) => res.send(err))
 })
 
 export default router
