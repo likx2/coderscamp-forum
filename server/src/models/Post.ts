@@ -48,7 +48,7 @@ export function validateNewPost(post: object): Joi.ValidationResult {
       .max(10000)
       .required(),
     imageUrl: Joi.string(),
-    hashtags: Joi.array().items(Joi.string()),
+    hashtags: Joi.array().items(Joi.string()).required(),
   })
 
   return schema.validate(post)
