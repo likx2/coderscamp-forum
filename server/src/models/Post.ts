@@ -1,6 +1,7 @@
 import { model, Schema } from 'mongoose'
 import { Post as PostType } from '../types/Post'
 import { Reaction } from '../types/Reaction'
+import Joi, { string } from 'joi'
 
 const postSchema: Schema = new Schema(
   {
@@ -34,5 +35,23 @@ const postSchema: Schema = new Schema(
   },
   { timestamps: true },
 )
+
+export function validateNewPost(post: object): Joi.ValidationResult {
+  const schema = Joi.object({
+    // author: Joi.string(),
+    title: Joi.string()
+      .min(10)
+      .max(100)
+      .required(),
+    content: Joi.string()
+      .min(30)
+      .max(10000)
+      .required(),
+    imageUrl: Joi.string(),
+    hashtags: Joi.array().items(Joi.string()).required(),
+  })
+
+  return schema.validate(post)
+}
 
 export const Post = model<PostType>('Post', postSchema)
