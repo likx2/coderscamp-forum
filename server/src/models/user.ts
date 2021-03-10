@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 import Joi from 'joi'
 import passwordComplexity from 'joi-password-complexity'
 import jwt from 'jsonwebtoken'
+import { pick } from 'lodash'
 
 import { User as UserType } from '../types/User'
 import { AuthTokenPayload } from '../types/AuthTokenPayload'
@@ -41,6 +42,10 @@ userSchema.methods.generateAuthToken = function generateAuthToken(this: UserType
     isAdmin: this.isAdmin,
   }
   return jwt.sign(payload, jwtPrivateKey)
+}
+
+userSchema.methods.getProfile = function getProfile(this: UserType): object {
+  return pick(this, ['userName', 'email'])
 }
 
 export function validateNewUser(user: object): Joi.ValidationResult {

@@ -6,4 +6,5 @@ export interface User extends Document {
   password: string
   isAdmin: boolean
   generateAuthToken(): string
+  getProfile(): object
 }
