@@ -62,16 +62,58 @@ postRouter.put('/:id', auth, async (req: AuthenticatedRequest, res: Response) =>
 postRouter.delete('/:id', auth, async (req, res) => {
   const { id } = req.params
   await Post.findByIdAndDelete(id)
-  .then((deletedPost) => {
-    if (deletedPost) {
-      res.status(200).send(deletedPost)
-    } else {
-      return res.status(404).send(`Post with ${id} not found. Cannot be deleted.`)
-    }
-  })
-  .catch((err) => {
-    res.status(404).send(err.toString())
-  })
+    .then((deletedPost) => {
+      if (deletedPost) {
+        res.status(200).send(deletedPost)
+      } else {
+        return res.status(404).send(`Post with ${id} not found. Cannot be deleted.`)
+      }
+    })
+    .catch((err) => {
+      res.status(404).send(err.toString())
+    })
 })
 
- 
+postRouter.get('/', auth, async (req: AuthenticatedRequest, res) => {
+  const page = req.query.page ? parseInt(req.query.page as string) : 1
+  const limit = req.query.limit ? parseInt(req.query.limit as string) : 10
+  await Post.find()
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .then((posts) => {
+      if (!posts) {
+        res.status(404).send('None posts found.')
+      } else {
+        res.status(200).send(posts)
+      }
+    })
+})
+
+postRouter.get('/ranking/:hashtag', auth, async (req: AuthenticatedRequest, res) => {
+  const { hashtag } = req.params
+  const sortingParameter = req.query.type ? req.query.type : 'reactions'
+  const page = req.query.page ? parseInt(req.query.page as string) : 1
+  const limit = req.query.limit ? parseInt(req.query.limit as string) : 10
+  let result =  await Post.aggregate([
+    {
+      '$project': {
+        'length': { '$size': '$hashtags' },
+      },
+    },
+    { '$sort': { 'length': -1 } },
+    { '$skip': page },
+    { '$limit': limit },
+  ]) 
+  res.status(200).send(result)
+
+  // await Post.find({ hashtags: hashtag })
+  //   .skip((page - 1) * limit)
+  //   .limit(limit)
+  //   .then((posts) => {
+  //     if (!posts) {
+  //       res.status(404).send('None posts found.')
+  //     } else {
+  //       res.status(200).send(posts)
+  //     }
+  //   })
+})
