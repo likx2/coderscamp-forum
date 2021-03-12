@@ -1,10 +1,14 @@
 import { Schema, model } from 'mongoose'
 import Hashtag from '../types/Hashtag'
+import { Post } from './post'
 
 
 const hashtagSchema = new Schema({
-    hashtagName: String,
-    counter: {
+    name: {
+        type: String,
+        required: true
+    },
+    amount: {
         type: Number,
         default: 0
     }

@@ -3,8 +3,8 @@ import cors from 'cors'
 import { errorHandler } from '../middleware/errorHandler'
 
 import { authReducer } from '../routes/auth'
-import {postRouter} from '../routes/posts'
-import {topHashtagRouter} from '../routes/topHashtags'
+import { postRouter } from '../routes/posts'
+import { topHashtagRouter } from '../routes/topHashtags'
 
 // Handle async errors in request pipeline
 require('express-async-errors')
@@ -18,5 +18,5 @@ export function startupRoutes(app: Express): void {
   app.use('/topHashtags', topHashtagRouter)
 
   // error handling middleware in request pipeline
-  app.use(errorHandler)
+  // app.use(errorHandler)
 }

@@ -2,9 +2,9 @@ import { Request, Response, Router } from 'express'
 import { Post, validateNewPost } from '../models/post'
 import { auth } from '../middleware/auth'
 import { AuthenticatedRequest } from '../types/AuthenticatedRequest'
-import { Hashtag as hashtagModel } from '../models/hashtag'
-import { fromPairs } from 'lodash'
-import {hashtagAddOrUpdate, hashtagDelete} from '../helpers/hashtagHelpers'
+import { fromPairs, update } from 'lodash'
+import { createHashtag, updateHashtag, deleteHashtag } from '../helpers/hashtagHelpers'
+import { Hashtag as HashtagModel } from '../models/hashtag'
 
 export const postRouter = Router()
 
@@ -28,13 +28,6 @@ postRouter.post('/', auth, async (req: AuthenticatedRequest, res: Response) => {
   if (error) {
     return res.status(400).send(error.details[0].message)
   }
-// Hashtag adding
-  try{
-    hashtagAddOrUpdate(req.body.hashtags)
-  }
-  catch(err){
-    res.status(500).send(err)
-  }
 
   const newPost = new Post({
     ...value,
@@ -48,6 +41,15 @@ postRouter.post('/', auth, async (req: AuthenticatedRequest, res: Response) => {
       res.status(201).send(newPost)
     }
   })
+  // Hashtag adding
+  const { hashtags } = req.body
+
+  try {
+    createHashtag(hashtags)
+  }
+  catch (err) {
+    res.status(500).send(err)
+  }
 })
 
 postRouter.put('/:id', auth, async (req: AuthenticatedRequest, res: Response) => {
@@ -56,15 +58,10 @@ postRouter.put('/:id', auth, async (req: AuthenticatedRequest, res: Response) =>
   if (error) {
     return res.status(400).send(error.details[0].message)
   }
- // Hashtag updating
- try{
-  hashtagAddOrUpdate(req.body.hashtags)
-}
-catch(err){
-  res.status(500).send(err)
-}
+  const existedPost = await Post.findById(id)
+  const existedHashtags = existedPost!.hashtags
 
-  await Post.findByIdAndUpdate(id, { ...value }, { new: true })
+  const updatedPost = await Post.findByIdAndUpdate(id, { ...value }, { new: true })
     .then((updatedPost) => {
       if (updatedPost) {
         res.status(200).send(updatedPost)
@@ -75,17 +72,21 @@ catch(err){
     .catch((err) => {
       res.status(404).send(err.toString())
     })
+  const { hashtags } = req.body
+
+  // Hashtag update
+  try {
+    updateHashtag(hashtags, existedHashtags)
+  }
+  catch (err) {
+    res.status(500).send(err)
+  }
 })
+
 
 postRouter.delete('/:id', auth, async (req, res) => {
   const { id } = req.params
-  // Hashtag deleting
-  try{
-    hashtagDelete(req.body.hashtags)
-  }
-  catch(err){
-    res.status(500).send(err)
-  }
+
   await Post.findByIdAndDelete(id)
     .then((deletedPost) => {
       if (deletedPost) {
@@ -97,6 +98,15 @@ postRouter.delete('/:id', auth, async (req, res) => {
     .catch((err) => {
       res.status(404).send(err.toString())
     })
+  // Hashtag deleting
+  const { hashtags } = req.body
+
+  try {
+    deleteHashtag(hashtags)
+  }
+  catch (err) {
+    res.status(500).send(err)
+  }
 })
 
 

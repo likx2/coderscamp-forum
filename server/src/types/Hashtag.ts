@@ -1,5 +1,7 @@
 import { Document } from 'mongoose'
+import { Post } from './Post';
 export default interface Hashtag extends Document {
-    hashtagName: string,
-    counter: number
+    name: string,
+    amount: number,
+    posts: string[]
 }

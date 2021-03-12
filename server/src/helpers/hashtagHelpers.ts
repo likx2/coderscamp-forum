@@ -1,24 +1,53 @@
-import { Hashtag as hashtagModel } from '../models/hashtag'
+import { Hashtag } from '../models/hashtag'
 
 
 
-export const  hashtagAddOrUpdate=(hashtags: string[]) => {
-    
+export const createHashtag = (hashtags: string[]) => {
+
     hashtags.forEach(async (hashtag) => {
-        const foundHashtag = await hashtagModel.findOne({ hashtagName: hashtag })
+        const foundHashtag = await Hashtag.findOne({ name: hashtag })
+
         if (foundHashtag) {
-            let counter = foundHashtag.counter
-            await hashtagModel.findOneAndUpdate({ hashtagName: hashtag }, { counter: ++counter })
+
+            await Hashtag.findOneAndUpdate({ name: hashtag }, { $inc: { amount: 1 } })
 
         }
+
         else {
-            await new hashtagModel({ hashtagName: hashtag, counter: 1 }).save()
+
+            await new Hashtag({ name: hashtag, amount: 1 }).save()
         }
     })
+
 }
 
-export const hashtagDelete = (hashtags: string[])=>{
-hashtags.forEach(async(hashtag)=>{
-     await hashtagModel.findOneAndDelete({ hashtagName: hashtag })
-})
+export const updateHashtag = async (hashtags: string[], existedHashtags: string[]) => {
+
+    await deleteHashtag(existedHashtags)
+
+    createHashtag(hashtags)
+
 }
+
+
+
+
+export const deleteHashtag = (hashtags: string[]) => {
+
+
+    Promise.all(
+        hashtags.map(hashtag => Hashtag.findOneAndUpdate({ name: hashtag }, { $inc: { amount: -1 } })
+        )
+    )
+        .then(() => {
+            Promise.all(
+                hashtags.map(hashtag => Hashtag.findOneAndDelete({ $and: [{ name: hashtag }, { amount: 0 }] }))
+            )
+        })
+    // hashtags.forEach(async (hashtag) => {
+    //     await Hashtag.findOneAndUpdate({ name: hashtag }, { $inc: { amount: -1 } })
+    //     await Hashtag.findOneAndDelete({ $and: [{ name: hashtag }, { amount: 0 }] })
+    // })
+}
+
+
