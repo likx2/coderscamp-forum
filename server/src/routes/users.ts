@@ -13,12 +13,12 @@ usersReducer.get('/me', [auth], async (req: AuthenticatedRequest, res: Response)
   }
 
   // Find user with given id
-  const me = await User.findById(req.user._id)
-  if (!me) {
+  const user = await User.findById(req.user._id)
+  if (!user) {
     // If there is no user with given ID(it is really weird) return not found status
     return res.status(404).send('User not found.')
   }
-  return res.status(200).send(me.getProfile())
+  return res.status(200).send(user.getProfile())
 })
 
 // Get user by Id

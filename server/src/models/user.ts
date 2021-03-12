@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import Joi from 'joi'
 import passwordComplexity from 'joi-password-complexity'
 import jwt from 'jsonwebtoken'
-import { pick } from 'lodash'
+import pick from 'lodash/pick'
 
 import { User as UserType } from '../types/User'
 import { AuthTokenPayload } from '../types/AuthTokenPayload'
