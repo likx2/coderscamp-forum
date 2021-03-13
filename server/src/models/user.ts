@@ -2,11 +2,12 @@ import mongoose from 'mongoose'
 import Joi from 'joi'
 import passwordComplexity from 'joi-password-complexity'
 import jwt from 'jsonwebtoken'
+import pick from 'lodash/pick'
 
 import { User as UserType } from '../types/User'
 import { AuthTokenPayload } from '../types/AuthTokenPayload'
 
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema<UserType>({
   userName: {
     type: String,
     unique: true,
@@ -28,14 +29,23 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "can't be blank"],
   },
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
 })
 
-userSchema.methods.generateAuthToken = function generateAuthToken(): string {
+userSchema.methods.generateAuthToken = function generateAuthToken(this: UserType): string {
   const jwtPrivateKey = process.env.JWT_PRIVATE_KEY!
   const payload: AuthTokenPayload = {
     _id: this._id,
+    isAdmin: this.isAdmin,
   }
   return jwt.sign(payload, jwtPrivateKey)
+}
+
+userSchema.methods.getProfile = function getProfile(this: UserType): object {
+  return pick(this, ['userName', 'email'])
 }
 
 export function validateNewUser(user: object): Joi.ValidationResult {

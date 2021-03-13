@@ -2,7 +2,7 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import pick from 'lodash/pick'
 
-import { User, validateNewUser, validateLoginDetails } from '../models/user'
+import { User, validateNewUser, validateLoginDetails } from '../models/User'
 
 export const authReducer = express.Router()
 
