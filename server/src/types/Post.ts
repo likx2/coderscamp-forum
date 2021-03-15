@@ -6,4 +6,5 @@ export interface Post extends Document {
   content: string
   imageUrl: string
   hashtags: string[]
+  commentsCount: number
 }

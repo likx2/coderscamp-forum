@@ -3,6 +3,7 @@ import { Post, validateNewPost } from '../models/Post'
 import { Comment, validateNewComment } from '../models/Comment'
 import { auth } from '../middleware/auth'
 import { AuthenticatedRequest } from '../types/AuthenticatedRequest'
+import { Number } from 'mongoose'
 
 export const postRouter = Router()
 
@@ -92,28 +93,23 @@ postRouter.get('/', auth, async (req: AuthenticatedRequest, res) => {
 })
 
 postRouter.get('/ranking/:hashtag', auth, async (req: AuthenticatedRequest, res) => {
-  const sortingTypes = ['reactions', 'comments', 'date']
+  const sortingTypes: string[] = ['date', 'reactions', 'comments']
+  const sortingDirections: string[] = ['descending', 'ascending']
   const { hashtag } = req.params
-  const sortingParameter = sortingTypes.includes(req.query.type as string) ? req.query.type : 'date'
-  const page = req.query.page ? parseInt(req.query.page as string) : 1
-  const limit = req.query.limit ? parseInt(req.query.limit as string) : 10
+  const sortingParameter = sortingTypes.includes(req.query.type as string)
+    ? (req.query.type as string)
+    : sortingTypes[0]
+  const sortDirection: string = sortingTypes.includes(req.query.direction as string)
+    ? (req.query.direction as string)
+    : sortingTypes[0]
+  const sortDirectionInt: number = sortDirection === sortingDirections[0] ? -1 : 1
+  const page: number = req.query.page ? parseInt(req.query.page as string) : 1
+  const limit: number = req.query.limit ? parseInt(req.query.limit as string) : 10
 
-  const getSortedByDate = (hashtag: string) => {
+
+  const getSortedBy = (sortingObject: any , hashtag: string) => {
     Post.find()
-      .sort({ createdAt: -1 })
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .then((posts) => {
-        if (!posts) {
-          res.status(404).send('None posts found.')
-        } else {
-          res.status(200).send(posts)
-        }
-      })
-  }
-  const getSortedByComments = (hashtag: string) => {
-    Post.find()
-      .sort({ commentsCount: -1 })
+      .sort(sortingObject)
       .skip((page - 1) * limit)
       .limit(limit)
       .then((posts) => {
@@ -152,14 +148,14 @@ postRouter.get('/ranking/:hashtag', auth, async (req: AuthenticatedRequest, res)
   }
 
   switch (sortingParameter) {
-    case sortingTypes[0]:
+    case sortingTypes[1]:
       getSortedByReactions(hashtag)
       break
-    case sortingTypes[1]:
-      getSortedByComments(hashtag)
+    case sortingTypes[2]:
+      getSortedBy({ commentsCount: sortDirectionInt }, hashtag)
       break
     default:
-      getSortedByDate(hashtag)
+      getSortedBy( { createdAt: sortDirectionInt }, hashtag)
       break
   }
 })

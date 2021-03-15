@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose'
-import { Post as PostType } from '../types/Post'
+import { IPostSortHelper, Post as PostType } from '../types/Post'
 import { Reaction } from '../types/Reaction'
 import Joi, { string } from 'joi'
 
@@ -39,6 +39,8 @@ const postSchema: Schema = new Schema(
     }
   },
   { timestamps: true },
+
+  
 )
 
 export function validateNewPost(post: object): Joi.ValidationResult {
@@ -60,3 +62,4 @@ export function validateNewPost(post: object): Joi.ValidationResult {
 }
 
 export const Post = model<PostType>('Post', postSchema)
+
