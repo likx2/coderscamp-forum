@@ -32,6 +32,11 @@ const postSchema: Schema = new Schema(
     reactions: {
       type: [Reaction],
     },
+    commentsCount:{
+      type: Number,
+      default: 0
+
+    }
   },
   { timestamps: true },
 )

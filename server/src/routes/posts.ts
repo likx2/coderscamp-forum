@@ -79,6 +79,7 @@ postRouter.get('/', auth, async (req: AuthenticatedRequest, res) => {
   const page = req.query.page ? parseInt(req.query.page as string) : 1
   const limit = req.query.limit ? parseInt(req.query.limit as string) : 10
   await Post.find()
+    .sort({ createdAt: -1 })
     .skip((page - 1) * limit)
     .limit(limit)
     .then((posts) => {
@@ -91,15 +92,41 @@ postRouter.get('/', auth, async (req: AuthenticatedRequest, res) => {
 })
 
 postRouter.get('/ranking/:hashtag', auth, async (req: AuthenticatedRequest, res) => {
+  const sortingTypes = ['reactions', 'comments', 'date']
   const { hashtag } = req.params
-  const sortingParameter = req.query.type ? req.query.type : 'reactions'
+  const sortingParameter = sortingTypes.includes(req.query.type as string) ? req.query.type : 'date'
   const page = req.query.page ? parseInt(req.query.page as string) : 1
   const limit = req.query.limit ? parseInt(req.query.limit as string) : 10
 
-  const getSortedByComments = async (hashtag: string): Promise<any> => {}
+  const getSortedByDate = (hashtag: string) => {
+    Post.find()
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .then((posts) => {
+        if (!posts) {
+          res.status(404).send('None posts found.')
+        } else {
+          res.status(200).send(posts)
+        }
+      })
+  }
+  const getSortedByComments = (hashtag: string) => {
+    Post.find()
+      .sort({ commentsCount: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .then((posts) => {
+        if (!posts) {
+          res.status(404).send('None posts found.')
+        } else {
+          res.status(200).send(posts)
+        }
+      })
+  }
 
-  const getSortedByReactions = async (hashtag: string): Promise<any> => {
-    return Post.aggregate([
+  const getSortedByReactions = (hashtag: string) => {
+    Post.aggregate([
       {
         '$project': {
           'author': 1,
@@ -108,42 +135,61 @@ postRouter.get('/ranking/:hashtag', auth, async (req: AuthenticatedRequest, res)
           'imageUrl': 1,
           'hashtags': 1,
           'reactions': 1,
+          'commentsCount': 1,
           'length': { '$size': `$reactions` },
           'containsHashtags': { '$in': [hashtag, '$hashtags'] },
+          'createdAt': 1,
         },
       },
       { '$match': { 'containsHashtags': { '$eq': true } } },
       { '$sort': { 'length': -1 } },
       { '$skip': (page - 1) * limit },
       { '$limit': limit },
-    ])
+    ]).exec((err, posts) => {
+      if (err) throw err
+      res.send(posts)
+    })
+  }
+
+  switch (sortingParameter) {
+    case sortingTypes[0]:
+      getSortedByReactions(hashtag)
+      break
+    case sortingTypes[1]:
+      getSortedByComments(hashtag)
+      break
+    default:
+      getSortedByDate(hashtag)
+      break
   }
 })
 
 postRouter.post('/:id/comments', auth, async (req: AuthenticatedRequest, res: Response) => {
-  await Post.findById(req.params.id).then((post) => {
-    if(!post){
-      return res.status(404).send("Post not found")
-    }
-    const { error, value } = validateNewComment(req.body)
-    if (error) {
-      return res.status(400).send(error.details[0].message)
-    }
-
-    const newComment = new Comment({
-      ...value,
-      author: req.user?._id,
-      post: post._id,
-    })
-
-    newComment.save((err) => {
-      if (err) {
-        res.status(401).send(err)
-      } else {
-        res.status(201).send(newComment)
+  Post.findByIdAndUpdate({ _id: req.params.id }, { $inc: { commentsCount: 1 } })
+    .then((post) => {
+      if (!post) {
+        return res.status(404).send('Post not found')
       }
+      const { error, value } = validateNewComment(req.body)
+      if (error) {
+        return res.status(400).send(error.details[0].message)
+      }
+
+      const newComment = new Comment({
+        ...value,
+        author: req.user?._id,
+        post: post._id,
+      })
+
+      newComment.save((err) => {
+        if (err) {
+          res.status(401).send(err)
+        } else {
+          res.status(201).send(newComment)
+        }
+      })
     })
-  }).catch(err => {
-    return res.status(403).send("Wrong request.")
-  })
+    .catch((err) => {
+      return res.status(403).send('Wrong request.')
+    })
 })
