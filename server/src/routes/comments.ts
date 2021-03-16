@@ -40,12 +40,11 @@ commentsReducer.post('/', auth, async (req: AuthenticatedRequest, res: Response)
   const comment = new Comment({
     post: req.body.post,
     author: req.user?._id,
-    reactions: [],
     content: req.body.content,
   })
   await comment.save()
 
-  res.send(comment)
+  res.status(200).send(comment)
 })
 
 commentsReducer.put('/:id', auth, async (req: AuthenticatedRequest, res: Response) => {
@@ -75,7 +74,7 @@ commentsReducer.delete('/:id', auth, async (req: AuthenticatedRequest, res: Resp
     return res.status(404).send('User not found.')
   }
   await comment.delete()
-  res.send(comment)
+  res.status(200).send(comment)
 })
 
 commentsReducer.post(

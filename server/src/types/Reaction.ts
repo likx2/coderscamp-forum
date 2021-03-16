@@ -5,7 +5,7 @@ export const Reaction = new Schema({
   reactionName: String,
 })
 
-export interface ReactionInterface {
+export interface IReaction {
   userId: String,
   reactionName: String,
 }

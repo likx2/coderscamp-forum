@@ -24,6 +24,7 @@ const commentSchema: Schema = new Schema(
     reactions: {
       type: [Reaction],
       required: true,
+      default: [],
     },
   },
   { timestamps: true },
