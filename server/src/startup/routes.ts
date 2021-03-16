@@ -4,7 +4,8 @@ import { errorHandler } from '../middleware/errorHandler'
 
 import { authReducer } from '../routes/auth'
 import { usersReducer } from '../routes/users'
-import {postRouter} from '../routes/posts'
+import { postRouter } from '../routes/posts'
+import { commentsReducer } from '../routes/comments'
 
 // Handle async errors in request pipeline
 require('express-async-errors')
@@ -16,6 +17,7 @@ export function startupRoutes(app: Express): void {
   app.use('/auth', authReducer)
   app.use('/users', usersReducer)
   app.use('/posts', postRouter)
+  app.use('/comments', commentsReducer)
 
   // error handling middleware in request pipeline
   app.use(errorHandler)

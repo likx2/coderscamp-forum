@@ -23,16 +23,40 @@ const commentSchema: Schema = new Schema(
     },
     reactions: {
       type: [Reaction],
+      required: true,
+      default: [],
     },
   },
   { timestamps: true },
 )
 
 export function validateNewComment(comment: object): Joi.ValidationResult {
+  const objectIdPattern = /^[0-9a-fA-F]{24}$/
+  const schema = Joi.object({
+    post: Joi.string().regex(objectIdPattern).required(),
+    content: Joi.string()
+      .min(1)
+      .max(500)
+      .required(),
+  })
+  return schema.validate(comment)
+}
+
+export function validateEditedComment(comment: object): Joi.ValidationResult {
   const schema = Joi.object({
     content: Joi.string()
-      .min(30)
-      .max(10000)
+      .min(1)
+      .max(500)
+      .required(),
+  })
+  return schema.validate(comment)
+}
+
+export function validateReaction(comment: object): Joi.ValidationResult {
+  const schema = Joi.object({
+    reactionName: Joi.string()
+      .min(3)
+      .max(50)
       .required(),
   })
   return schema.validate(comment)
