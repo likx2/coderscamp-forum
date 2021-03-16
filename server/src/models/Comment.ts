@@ -1,3 +1,4 @@
+import Joi from 'joi'
 import { model, Schema } from 'mongoose'
 import { Comment as CommentType } from '../types/Comment'
 import { Reaction } from '../types/Reaction'
@@ -26,5 +27,15 @@ const commentSchema: Schema = new Schema(
   },
   { timestamps: true },
 )
+
+export function validateNewComment(comment: object): Joi.ValidationResult {
+  const schema = Joi.object({
+    content: Joi.string()
+      .min(30)
+      .max(10000)
+      .required(),
+  })
+  return schema.validate(comment)
+}
 
 export const Comment = model<CommentType>('Comment', commentSchema)
