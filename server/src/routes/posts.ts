@@ -1,4 +1,4 @@
-import { Request, Response, Router } from 'express'
+import { Response, Router } from 'express'
 import { Post, validateNewPost } from '../models/Post'
 import { Comment, validateNewComment } from '../models/Comment'
 import { auth } from '../middleware/auth'
@@ -8,8 +8,8 @@ import { createHashtag, updateHashtag, deleteHashtag } from '../helpers/hashtagH
 
 export const postRouter = Router()
 
-postRouter.get('/:id', auth, async (req: AuthenticatedRequest, res: Response) => {
-  const id = req.params.id
+postRouter.get('/:id', async (req: AuthenticatedRequest, res: Response) => {
+  const { id } = req.params
   await Post.findById(id)
     .then((post) => {
       if (post) {
@@ -28,10 +28,14 @@ postRouter.post('/', auth, async (req: AuthenticatedRequest, res: Response) => {
   if (error) {
     return res.status(400).send(error.details[0].message)
   }
+  if (!req.user) {
+    // After auth middleware we should have req.user otherwise return error
+    return res.status(500).send('Something goes wrong.')
+  }
 
   const newPost = new Post({
     ...value,
-    author: req.user?._id,
+    author: req.user._id,
   })
 
   newPost.save((err) => {

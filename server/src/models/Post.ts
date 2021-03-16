@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose'
+import Joi from 'joi'
 import { Post as PostType } from '../types/Post'
 import { Reaction } from '../types/Reaction'
-import Joi, { string } from 'joi'
 
 const postSchema: Schema = new Schema(
   {
@@ -55,7 +55,9 @@ export function validateNewPost(post: object): Joi.ValidationResult {
       .max(10000)
       .required(),
     imageUrl: Joi.string(),
-    hashtags: Joi.array().items(Joi.string()).required(),
+    hashtags: Joi.array()
+      .items(Joi.string())
+      .required(),
   })
 
   return schema.validate(post)
