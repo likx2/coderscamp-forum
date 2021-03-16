@@ -68,5 +68,5 @@ authReducer.post('/login', async (req, res) => {
   return res
     .status(200)
     .header('x-auth-token', authToken)
-    .send(pick(user, ['userName', 'email']))
+    .send(pick(user, ['userName', 'email',]))
 })

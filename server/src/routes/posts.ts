@@ -4,6 +4,7 @@ import { Comment, validateNewComment } from '../models/Comment'
 import { auth } from '../middleware/auth'
 import { AuthenticatedRequest } from '../types/AuthenticatedRequest'
 import { Number } from 'mongoose'
+import { createHashtag, updateHashtag, deleteHashtag } from '../helpers/hashtagHelpers'
 
 export const postRouter = Router()
 
@@ -44,6 +45,15 @@ postRouter.post('/', auth, async (req: AuthenticatedRequest, res: Response) => {
       res.status(201).send(newPost)
     }
   })
+  // Hashtag adding
+  const { hashtags } = req.body
+
+  try {
+    createHashtag(hashtags)
+  }
+  catch (err) {
+    res.status(500).send(err)
+  }
 })
 
 postRouter.put('/:id', auth, async (req: AuthenticatedRequest, res: Response) => {
@@ -52,7 +62,10 @@ postRouter.put('/:id', auth, async (req: AuthenticatedRequest, res: Response) =>
   if (error) {
     return res.status(400).send(error.details[0].message)
   }
-  await Post.findByIdAndUpdate(id, { ...value }, { new: true })
+  const existedPost = await Post.findById(id)
+  const existedHashtags = existedPost!.hashtags
+
+  const updatedPost = await Post.findByIdAndUpdate(id, { ...value }, { new: true })
     .then((updatedPost) => {
       if (updatedPost) {
         res.status(200).send(updatedPost)
@@ -63,10 +76,21 @@ postRouter.put('/:id', auth, async (req: AuthenticatedRequest, res: Response) =>
     .catch((err) => {
       res.status(404).send(err.toString())
     })
+  const { hashtags } = req.body
+
+  // Hashtag update
+  try {
+    updateHashtag(hashtags, existedHashtags)
+  }
+  catch (err) {
+    res.status(500).send(err)
+  }
 })
+
 
 postRouter.delete('/:id', auth, async (req, res) => {
   const { id } = req.params
+
   await Post.findByIdAndDelete(id)
     .then((deletedPost) => {
       if (deletedPost) {
@@ -78,7 +102,17 @@ postRouter.delete('/:id', auth, async (req, res) => {
     .catch((err) => {
       res.status(404).send(err.toString())
     })
+  // Hashtag deleting
+  const { hashtags } = req.body
+
+  try {
+    deleteHashtag(hashtags)
+  }
+  catch (err) {
+    res.status(500).send(err)
+  }
 })
+
 
 postRouter.get('/', auth, async (req: AuthenticatedRequest, res) => {
   const page = req.query.page ? parseInt(req.query.page as string) : 1
@@ -111,7 +145,7 @@ postRouter.get('/ranking/:hashtag', auth, async (req: AuthenticatedRequest, res)
   const limit: number = req.query.limit ? parseInt(req.query.limit as string) : 10
 
 
-  const getSortedBy = (sortingObject: any , hashtag: string) => {
+  const getSortedBy = (sortingObject: any, hashtag: string) => {
     Post.find()
       .sort(sortingObject)
       .skip((page - 1) * limit)
@@ -159,7 +193,7 @@ postRouter.get('/ranking/:hashtag', auth, async (req: AuthenticatedRequest, res)
       getSortedBy({ commentsCount: sortDirectionInt }, hashtag)
       break
     default:
-      getSortedBy( { createdAt: sortDirectionInt }, hashtag)
+      getSortedBy({ createdAt: sortDirectionInt }, hashtag)
       break
   }
 })

@@ -32,7 +32,7 @@ const postSchema: Schema = new Schema(
     reactions: {
       type: [Reaction],
     },
-    commentsCount:{
+    commentsCount: {
       type: Number,
       default: 0
 
@@ -40,7 +40,7 @@ const postSchema: Schema = new Schema(
   },
   { timestamps: true },
 
-  
+
 )
 
 export function validateNewPost(post: object): Joi.ValidationResult {
