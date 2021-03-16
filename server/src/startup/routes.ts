@@ -18,5 +18,5 @@ export function startupRoutes(app: Express): void {
   app.use('/topHashtags', topHashtagRouter)
 
   // error handling middleware in request pipeline
-  // app.use(errorHandler)
+  app.use(errorHandler)
 }

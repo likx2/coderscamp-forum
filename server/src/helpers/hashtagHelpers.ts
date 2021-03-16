@@ -34,20 +34,16 @@ export const updateHashtag = async (hashtags: string[], existedHashtags: string[
 
 export const deleteHashtag = (hashtags: string[]) => {
 
+    hashtags.forEach(async (hashtag) => {
 
-    Promise.all(
-        hashtags.map(hashtag => Hashtag.findOneAndUpdate({ name: hashtag }, { $inc: { amount: -1 } })
-        )
-    )
-        .then(() => {
-            Promise.all(
-                hashtags.map(hashtag => Hashtag.findOneAndDelete({ $and: [{ name: hashtag }, { amount: 0 }] }))
-            )
-        })
-    // hashtags.forEach(async (hashtag) => {
-    //     await Hashtag.findOneAndUpdate({ name: hashtag }, { $inc: { amount: -1 } })
-    //     await Hashtag.findOneAndDelete({ $and: [{ name: hashtag }, { amount: 0 }] })
-    // })
+        const existedHashtag = await Hashtag.findOne({ name: hashtag })
+        if (existedHashtag?.amount === 1) {
+            await Hashtag.findOneAndDelete({ name: hashtag })
+        }
+        else {
+            await Hashtag.findOneAndUpdate({ name: hashtag }, { $inc: { amount: -1 } })
+        }
+    })
 }
 
 
