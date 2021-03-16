@@ -4,5 +4,7 @@ export interface User extends Document {
   username: string
   email: string
   password: string
-  generateAuthToken: () => string
+  isAdmin: boolean
+  generateAuthToken(): string
+  getProfile(): object
 }

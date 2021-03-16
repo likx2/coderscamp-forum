@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express'
-import { Hashtag } from '../models/hashtag'
-import { Post } from '../models/post'
+import { Hashtag } from '../models/Hashtag'
+import { Post } from '../models/Post'
 
 export const topHashtagRouter = Router()
 

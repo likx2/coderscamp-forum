@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose'
 import Hashtag from '../types/Hashtag'
-import { Post } from './post'
+import { Post } from './Post'
 
 
 const hashtagSchema = new Schema({
