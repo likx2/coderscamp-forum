@@ -1,7 +1,10 @@
-import * as React from 'react'
+import { FC } from "react";
+import './App.scss';
 
-const App: React.FC = () => {
-  return <main className="App">siema</main>
-}
+const App: FC = () => (
+  <div> 
+      hi
+  </div>
+);
 
-export default App
+export default App;
