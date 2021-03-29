@@ -11,9 +11,8 @@
     "ecmaFeatures": {
       "jsx": true
     },
-    "ecmaVersion": 2018,
-    "project": "tsconfig.json",
-    "sourceType": "module"
+    "target": "es5",
+    "project": "./tsconfig.json"
   },
   "plugins": ["eslint-plugin-import-helpers"],
   "rules": {

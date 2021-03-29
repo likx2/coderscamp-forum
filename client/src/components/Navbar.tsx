@@ -1,25 +1,28 @@
-import { FC } from 'react';
+import { FC, useEffect, useImperativeHandle, useState } from 'react';
+import { Link, Router } from 'react-router-dom';
 
 import styled from 'styled-components';
 
 import searchIcon from '../assets/search.svg';
 
 const Header = styled.header`
-  height: 16vh;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  height: 250px;
+  background-color: red;
 `;
 
 const Wrapper = styled.nav`
-  border-radius: 15px;
-  width: 70%;
-  max-width: 1400px;
-  height: 81px;
-  background: rgba(255, 255, 255, 0.45);
   display: flex;
   justify-content: space-around;
   align-items: center;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 1600px;
+  padding: 15px 0;
+  background: rgba(255, 255, 255, 0.45);
+  margin: 20px;
 `;
 
 const Logo = styled.h1`
@@ -68,6 +71,17 @@ const Switcher = styled.div`
   background: #e7e8e6;
 `;
 
+const Switch = styled.div`
+  position: relative;
+  left: 8%;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  background-color: #ffffff;
+`;
+
 const LoginButton = styled.button`
   background: rgba(255, 234, 137, 0.9);
   height: 50px;
@@ -80,20 +94,69 @@ const LoginButton = styled.button`
   cursor: pointer;
 `;
 
-const Navbar: FC = () => (
-  <Header>
-    <Wrapper>
-      <Logo>CampForum</Logo>
-      <SearchBarWrapper>
-        <SearchIcon src={searchIcon} />
-        <SearchBar type="text" />
-      </SearchBarWrapper>
-      <ButtonsWrapper>
-        <Switcher />
-        <LoginButton>Zaloguj się</LoginButton>
-      </ButtonsWrapper>
-    </Wrapper>
-  </Header>
-);
+const HashtagWrapper = styled.ul`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 15px;
+  width: 70%;
+  max-width: 1400px;
+  padding: 15px 0;
+  background: rgba(255, 255, 255, 0.45);
+  margin: 30px;
+  list-style: none;
+`;
+
+const Hashtag = styled.li`
+  cursor: pointer;
+`;
+
+const Navbar: FC = () => {
+  const [darkmode, setDarkmode] = useState(false);
+  const [hashtags, setHashtags] = useState([
+    'Kino',
+    'Rozrywka',
+    'Kino1',
+    'Rozrywka1',
+    'Kino2',
+    'Rozrywka2',
+  ]);
+
+  // useEffect(() => {
+  //   fetch('')
+  //     .then((response) => response.json())
+  //     .then((hashtags) => {
+  //       setHashtags(hashtags.slice(0, 6));
+  //     });
+  // }, []);
+
+  return (
+    <Header>
+      <Wrapper>
+        <Logo>CampForum</Logo>
+        <SearchBarWrapper>
+          <SearchIcon src={searchIcon} />
+          <SearchBar type="text" />
+        </SearchBarWrapper>
+        <ButtonsWrapper>
+          <Switcher>
+            <Switch onClick={() => setDarkmode(!darkmode)} />
+          </Switcher>
+          <LoginButton>Zaloguj się</LoginButton>
+        </ButtonsWrapper>
+      </Wrapper>
+      <HashtagWrapper>
+        {/* <Router> */}
+        {hashtags.map((h) => (
+          <Hashtag key={h}>
+            {h}
+            {/* <Link to="/#">{h}</Link> */}
+          </Hashtag>
+        ))}
+        {/* </Router> */}
+      </HashtagWrapper>
+    </Header>
+  );
+};
 
 export default Navbar;
