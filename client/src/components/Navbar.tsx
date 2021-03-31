@@ -10,7 +10,6 @@ const Header = styled.header`
   flex-direction: column;
   align-items: center;
   height: 250px;
-  background-color: red;
 `;
 
 const Wrapper = styled.nav`
@@ -94,7 +93,7 @@ const LoginButton = styled.button`
   cursor: pointer;
 `;
 
-const HashtagWrapper = styled.ul`
+const HashtagWrapper = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -107,28 +106,26 @@ const HashtagWrapper = styled.ul`
   list-style: none;
 `;
 
-const Hashtag = styled.li`
-  cursor: pointer;
+const Hashtag = styled(Link)`
+  text-decoration: none;
+  color: rgba(61, 68, 67, 0.7);
+  font-weight: 500;
+
+  &:hover {
+    color: #3d4443;
+  }
 `;
 
 const Navbar: FC = () => {
   const [darkmode, setDarkmode] = useState(false);
-  const [hashtags, setHashtags] = useState([
-    'Kino',
-    'Rozrywka',
-    'Kino1',
-    'Rozrywka1',
-    'Kino2',
-    'Rozrywka2',
-  ]);
-
-  // useEffect(() => {
-  //   fetch('')
-  //     .then((response) => response.json())
-  //     .then((hashtags) => {
-  //       setHashtags(hashtags.slice(0, 6));
-  //     });
-  // }, []);
+  const hashtags = [
+    'Świat',
+    'Zdrowie',
+    'Sport',
+    'Giełda',
+    'Programowanie',
+    'Uroda',
+  ];
 
   return (
     <Header>
@@ -146,14 +143,11 @@ const Navbar: FC = () => {
         </ButtonsWrapper>
       </Wrapper>
       <HashtagWrapper>
-        {/* <Router> */}
         {hashtags.map((h) => (
-          <Hashtag key={h}>
+          <Hashtag key={h} to={`url../ranking/${h}`}>
             {h}
-            {/* <Link to="/#">{h}</Link> */}
           </Hashtag>
         ))}
-        {/* </Router> */}
       </HashtagWrapper>
     </Header>
   );

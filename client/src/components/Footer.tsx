@@ -1,4 +1,5 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -7,6 +8,8 @@ const FooterWrapper = styled.footer`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+
   /* background: gray; */
 `;
 
@@ -20,22 +23,80 @@ const Wrapper = styled.div`
   padding-top: 30px;
 `;
 
-const Container = styled.div`
+const LinksContainer = styled.div`
   width: 35%;
   height: 60px;
-  /* border: 1px solid red; */
+  display: flex;
+  flex-direction: column;
 `;
 
-const Footer: FC = () => (
-  <FooterWrapper>
-    <Wrapper>
-      <Container>
-        <p>Idea CodeForum</p>
-        <p>Regulamin</p>
-      </Container>
-      <Container>hashtags</Container>
-    </Wrapper>
-  </FooterWrapper>
-);
+const HashtagsContainer = styled(LinksContainer)`
+  flex-direction: row;
+  flex-wrap: wrap;
+`;
+
+const StyledLink = styled(Link)`
+  color: rgba(61, 68, 67, 0.8);
+  text-decoration: none;
+  display: inline-block;
+  margin-right: 6px;
+  font-weight: 500;
+
+  &:hover {
+    color: #3d4443;
+  }
+`;
+
+const Sign = styled.h6`
+  color: rgba(61, 68, 67, 0.6);
+  font-weight: 400;
+  margin-top: 50px;
+`;
+
+const Footer: FC = () => {
+  const [hashtags, setHashtags] = useState([
+    'pzpn',
+    'bilard',
+    'COVID',
+    'pzpn1',
+    'bilard1',
+    'COVID1',
+    'pzpn2',
+    'bilard2',
+    'COVID2',
+    'pzpn3',
+    'bilard3',
+    'COVID3',
+  ]);
+
+  // useEffect(() => {
+  //   const fetchHashtags = async () => {
+  //     const result = await axios.get('url');
+
+  //     setHashtags(result.data);
+  //   };
+
+  //   fetchHashtags();
+  // }, []);
+
+  return (
+    <FooterWrapper>
+      <Wrapper>
+        <LinksContainer>
+          <StyledLink to="/">Idea CodeForum</StyledLink>
+          <StyledLink to="/">Regulamin</StyledLink>
+        </LinksContainer>
+        <HashtagsContainer>
+          {hashtags.map((hashtag) => (
+            <StyledLink key={hashtag} to={`url.../ranking/${hashtag}`}>
+              {hashtag}
+            </StyledLink>
+          ))}
+        </HashtagsContainer>
+      </Wrapper>
+      <Sign>Created by !Programiści</Sign>
+    </FooterWrapper>
+  );
+};
 
 export default Footer;
