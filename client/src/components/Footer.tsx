@@ -33,6 +33,8 @@ const LinksContainer = styled.div`
 const HashtagsContainer = styled(LinksContainer)`
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 `;
 
 const StyledLink = styled(Link)`
@@ -40,11 +42,26 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   display: inline-block;
   margin-right: 6px;
-  font-weight: 500;
+  font-weight: 600;
 
   &:hover {
     color: #3d4443;
   }
+`;
+
+const StyledTheBestHashtag = styled(StyledLink)`
+  font-weight: 800;
+  font-size: 20px;
+`;
+
+const StyledMediumHashtag = styled(StyledLink)`
+  font-weight: 600;
+  font-size: 16px;
+`;
+
+const StyledNormalHashtag = styled(StyledLink)`
+  font-weight: 400;
+  font-size: 14px;
 `;
 
 const Sign = styled.h6`
@@ -55,7 +72,7 @@ const Sign = styled.h6`
 
 const Footer: FC = () => {
   const [hashtags, setHashtags] = useState([
-    'pzpn',
+    'jedzenie',
     'bilard',
     'COVID',
     'pzpn1',
@@ -66,18 +83,48 @@ const Footer: FC = () => {
     'COVID2',
     'pzpn3',
     'bilard3',
-    'COVID3',
   ]);
 
   // useEffect(() => {
   //   const fetchHashtags = async () => {
-  //     const result = await axios.get('url');
+  //     const = await axios.get('url');
 
   //     setHashtags(result.data);
   //   };
 
   //   fetchHashtags();
   // }, []);
+
+  const theBestHashtags = hashtags.slice(0, 4).map((hashtag) => (
+    <StyledTheBestHashtag key={hashtag} to={`url.../ranking/${hashtag}`}>
+      {hashtag}
+    </StyledTheBestHashtag>
+  ));
+
+  const mediumHashtags = hashtags.slice(4, 7).map((hashtag) => (
+    <StyledMediumHashtag key={hashtag} to={`url.../ranking/${hashtag}`}>
+      {hashtag}
+    </StyledMediumHashtag>
+  ));
+
+  const normalHashtags = hashtags.slice(7, 10).map((hashtag) => (
+    <StyledNormalHashtag key={hashtag} to={`url.../ranking/${hashtag}`}>
+      {hashtag}
+    </StyledNormalHashtag>
+  ));
+
+  const allHashtags = [
+    theBestHashtags[0],
+    normalHashtags[0],
+    mediumHashtags[0],
+    theBestHashtags[1],
+    normalHashtags[1],
+    mediumHashtags[1],
+    mediumHashtags[2],
+    theBestHashtags[2],
+    theBestHashtags[3],
+    normalHashtags[2],
+  ];
 
   return (
     <FooterWrapper>
@@ -87,11 +134,12 @@ const Footer: FC = () => {
           <StyledLink to="/">Regulamin</StyledLink>
         </LinksContainer>
         <HashtagsContainer>
-          {hashtags.map((hashtag) => (
+          {/* {hashtags.map((hashtag) => (
             <StyledLink key={hashtag} to={`url.../ranking/${hashtag}`}>
               {hashtag}
             </StyledLink>
-          ))}
+          ))} */}
+          {allHashtags.map((hashtag) => hashtag)}
         </HashtagsContainer>
       </Wrapper>
       <Sign>Created by !Programiści</Sign>
