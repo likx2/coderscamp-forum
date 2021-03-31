@@ -12,7 +12,7 @@
       "jsx": true
     },
     "target": "es5",
-    "project": "./tsconfig.json"
+    "project": "./client/tsconfig.json"
   },
   "plugins": ["eslint-plugin-import-helpers"],
   "rules": {
