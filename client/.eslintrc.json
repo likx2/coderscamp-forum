@@ -13,7 +13,6 @@
     },
     "ecmaVersion": 2018,
     "project": "tsconfig.json",
-    "tsconfigRootDir": "./client/",
     "sourceType": "module"
   },
   "plugins": [
