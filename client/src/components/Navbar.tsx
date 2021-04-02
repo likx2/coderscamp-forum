@@ -1,5 +1,5 @@
 import { FC, useEffect, useImperativeHandle, useState } from 'react';
-import { Link, Router } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -63,24 +63,6 @@ const ButtonsWrapper = styled.div`
   width: 245px;
 `;
 
-const Switcher = styled.div`
-  width: 92px;
-  height: 50px;
-  border-radius: 30px;
-  background: #e7e8e6;
-`;
-
-const Switch = styled.div`
-  position: relative;
-  left: 8%;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 35px;
-  width: 35px;
-  border-radius: 50%;
-  background-color: #ffffff;
-`;
-
 const LoginButton = styled.button`
   background: rgba(255, 234, 137, 0.9);
   height: 50px;
@@ -116,8 +98,51 @@ const Hashtag = styled(Link)`
   }
 `;
 
+const SwitchWrapper = styled.div`
+  position: relative;
+`;
+const SwitchLabel = styled.label`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 92px;
+  height: 50px;
+  border-radius: 30px;
+  background: #e7e8e6;
+  cursor: pointer;
+  &::after {
+    content: '';
+    display: block;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    margin: 7px 0px 10px 3px;
+    background: #ffffff;
+    box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, 0.2);
+    transition: 0.2s;
+  }
+`;
+const SwitchInput = styled.input`
+  opacity: 0;
+  z-index: 1;
+  border-radius: 15px;
+  width: 42px;
+  height: 26px;
+  &:checked + ${SwitchLabel} {
+    background: rgba(255, 234, 137, 0.9);
+    &::after {
+      content: '';
+      display: block;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      margin: 7px 0px 10px 53px;
+      transition: 0.2s;
+    }
+  }
+`;
+
 const Navbar: FC = () => {
-  const [darkmode, setDarkmode] = useState(false);
   const hashtags = [
     'Świat',
     'Zdrowie',
@@ -136,9 +161,10 @@ const Navbar: FC = () => {
           <SearchBar type="text" />
         </SearchBarWrapper>
         <ButtonsWrapper>
-          <Switcher>
-            <Switch onClick={() => setDarkmode(!darkmode)} />
-          </Switcher>
+          <SwitchWrapper>
+            <SwitchInput id="checkbox" type="checkbox" />
+            <SwitchLabel htmlFor="checkbox" />
+          </SwitchWrapper>
           <LoginButton>Zaloguj się</LoginButton>
         </ButtonsWrapper>
       </Wrapper>

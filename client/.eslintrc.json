@@ -12,10 +12,11 @@
       "jsx": true
     },
     "target": "es5",
-    "project": "./client/tsconfig.json"
+    "project": "./tsconfig.json"
   },
   "plugins": ["eslint-plugin-import-helpers"],
   "rules": {
+    "no-param-reassign": 0,
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-empty-interface": [
       "error",

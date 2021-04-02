@@ -35,6 +35,7 @@ const HashtagsContainer = styled(LinksContainer)`
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  max-width: 300px;
 `;
 
 const StyledLink = styled(Link)`
