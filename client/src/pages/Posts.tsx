@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import Pagination from '../components/Pagination';
 import PostSample from '../components/PostSample';
-import LoadingSvg from '../images/Loader.svg';
+import LoadingSvg from '../assets/Loader.svg';
 import Post from '../types/Post';
 import useFetchPosts from '../utils/useFetchPosts';
 

@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import ExpandedPost from '../components/ExpandedPost';
-import LoadingSvg from '../images/Loader.svg';
+import LoadingSvg from '../assets/Loader.svg';
 import useFetchPostById from '../utils/useFetchPostById';
 
 const Loader = styled.img`

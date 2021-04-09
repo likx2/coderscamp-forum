@@ -1,13 +1,26 @@
-import React, { StrictMode } from 'react';
+import { StrictMode } from 'react';
 import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+
+import { configureStore } from '@reduxjs/toolkit';
 
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import postsSliceReducer from './store/PostSlice';
+
+const store = configureStore({
+  reducer: {
+    posts: postsSliceReducer,
+    // devTools: process.env.NODE_ENV !== 'development' ? false : true,
+  },
+});
 
 render(
   <StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </StrictMode>,
   document.getElementById('root'),
 );
