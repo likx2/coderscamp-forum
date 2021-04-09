@@ -1,18 +1,16 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 
-import ExpandedPost from './components/ExpandedPost';
-import Posts from './components/Posts';
-import PostSample from './components/PostSample';
+import PostDetails from './pages/PostDetails';
+import Posts from './pages/Posts';
 import './App.scss';
-import Post from './types/Post';
 
 const App: FC = () => {
   return (
     <Router>
       <Switch>
-        <Route component={Posts} exact path="/posts" />
-        <Route component={ExpandedPost} exact path="/posts/:id" />
+        <Route component={Posts} exact path="/posts/:page" />
+        <Route component={PostDetails} exact path="/posts/:page/:id" />
       </Switch>
     </Router>
   );

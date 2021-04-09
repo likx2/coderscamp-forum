@@ -5,6 +5,7 @@ import { auth } from '../middleware/auth'
 import { AuthenticatedRequest } from '../types/AuthenticatedRequest'
 import { Number } from 'mongoose'
 import { createHashtag, updateHashtag, deleteHashtag } from '../helpers/hashtagHelpers'
+import { start } from 'node:repl'
 
 export const postRouter = Router()
 
@@ -114,18 +115,36 @@ postRouter.delete('/:id', auth, async (req, res) => {
 })
 
 
+// postRouter.get('/', async (req: AuthenticatedRequest, res) => {
+//   const page = req.query.page ? parseInt(req.query.page as string) : 1
+//   const limit = req.query.limit ? parseInt(req.query.limit as string) : 10
+//   await Post.find()
+//     .sort({ createdAt: -1 })
+//     .skip((page - 1) * limit)
+//     .limit(limit)
+//     .then((posts) => {
+//       if (!posts) {
+//         res.status(404).send('None posts found.')
+//       } else {
+//         res.status(200).send(posts)
+//       }
+//     })
+// })
 postRouter.get('/', async (req: AuthenticatedRequest, res) => {
   const page = req.query.page ? parseInt(req.query.page as string) : 1
   const limit = req.query.limit ? parseInt(req.query.limit as string) : 10
   await Post.find()
-    .sort({ createdAt: -1 })
-    .skip((page - 1) * limit)
-    .limit(limit)
-    .then((posts) => {
-      if (!posts) {
+    .then(posts=>{
+     const startIndex = (page-1)*limit;
+     const endIndex = page*limit;
+     const currentPosts =  posts.slice(startIndex,endIndex)
+     return {totalPosts:posts.length,limit,currentPosts}
+    })
+    .then((data) => {
+      if (!data) {
         res.status(404).send('None posts found.')
       } else {
-        res.status(200).send(posts)
+        res.status(200).send(data)
       }
     })
 })
