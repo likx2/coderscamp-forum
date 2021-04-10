@@ -2,8 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import ExpandedPost from '../components/ExpandedPost';
 import LoadingSvg from '../assets/Loader.svg';
+import ExpandedPost from '../components/ExpandedPost';
 import useFetchPostById from '../utils/useFetchPostById';
 
 const Loader = styled.img`
@@ -15,8 +15,6 @@ const Loader = styled.img`
 `;
 
 const PostDetails = ({ match }: any) => {
-  console.log('posDetails');
-
   const [isLoading, post] = useFetchPostById(
     'http://localhost:4000',
     match.params.id,
