@@ -5,9 +5,6 @@ import styled from 'styled-components';
 import Post from '../types/Post';
 
 const Container = styled.div`
-  width: 90%;
-  max-width: 1400px;
-  margin: 67px auto 0 auto;
   padding: 55px 0 0;
   background-color: #fff;
   border-radius: 15px;

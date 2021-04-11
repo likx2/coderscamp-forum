@@ -13,7 +13,7 @@ const Loader = styled.img`
 `;
 
 const PostDetails = ({ match }: any) => {
-  const [isLoading, post] = useFetchPostById(
+  const { isLoading, post } = useFetchPostById(
     'http://localhost:4000',
     match.params.id,
   );

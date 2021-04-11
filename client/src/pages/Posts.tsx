@@ -15,7 +15,7 @@ const Loader = styled.img`
 `;
 const POSTS_PER_PAGE = 10;
 const Posts = ({ match }: any) => {
-  const [isLoading, totalPosts, posts] = useFetchPosts(
+  const { isLoading, totalPosts, posts } = useFetchPosts(
     'http://localhost:4000',
     match.params.page,
     POSTS_PER_PAGE,
