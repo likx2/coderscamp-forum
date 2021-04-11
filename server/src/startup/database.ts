@@ -7,7 +7,7 @@ export function startupDB(): void {
   const MONGO_DB: string = process.env.MONGO_DB || 'CC-Forum'
 
   // Set connection string
-  const uri: string = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@cluster0.mbxs0.mongodb.net/${MONGO_DB}?retryWrites=true&w=majority`
+  const uri: string = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@cc-forum.4k1nv.mongodb.net/${MONGO_DB}?retryWrites=true&w=majority`
 
   // Connection otions
   const options = {
