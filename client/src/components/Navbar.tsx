@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import searchIcon from '../assets/search.svg';
+import LoginModal, { useModal } from './login/LoginModal';
 
 const Header = styled.header`
   display: flex;
@@ -152,6 +153,8 @@ const Navbar: FC = () => {
     'Uroda',
   ];
 
+  const { isShowing, toggle } = useModal();
+
   return (
     <Header>
       <Wrapper>
@@ -165,8 +168,16 @@ const Navbar: FC = () => {
             <SwitchInput id="checkbox" type="checkbox" />
             <SwitchLabel htmlFor="checkbox" />
           </SwitchWrapper>
-          <LoginButton>Zaloguj się</LoginButton>
+          {localStorage.getItem('auth-token') !== ""?
+          <LoginButton onClick={() => {
+            localStorage.setItem('auth-token', "");
+            toggle();
+          }}>Wyloguj się</LoginButton>:
+          <LoginButton onClick={toggle}>Zaloguj się</LoginButton>
+        }
         </ButtonsWrapper>
+        
+        <LoginModal hide={toggle} isShowing={isShowing}/>
       </Wrapper>
       <HashtagWrapper>
         {hashtags.map((h) => (

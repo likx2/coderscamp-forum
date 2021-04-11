@@ -65,8 +65,10 @@ authReducer.post('/login', async (req, res) => {
   // User authenticated!
   const authToken = user.generateAuthToken()
 
+  res.setHeader('x-auth-token', authToken)
+  res.setHeader('Access-Control-Expose-Headers', 'x-auth-token')
+
   return res
     .status(200)
-    .header('x-auth-token', authToken)
     .send(pick(user, ['userName', 'email',]))
 })
