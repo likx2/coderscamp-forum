@@ -3,47 +3,62 @@ import React, { ReactElement, useState } from 'react';
 import { Anchor, ErrorMessage, Form, FormFooter, FormGroup, FormHeader, FormInner, Input, Label,  SubmitButton } from './styles';
 
 // Types
-type LoginFormProps = {
-  login: (details: LoginDetails) => void;
+type RegisterFormProps = {
+  register: (details: RegisterDetails) => void;
   error: string;
-  register: ()=>void;
+  login: ()=>void;
 };
 
-export type LoginDetails = {
-  login: string;
+export type RegisterDetails = {
+  userName: string;
   password: string;
+  email: string;
 };
 
-export default function LoginForm({
-  login,
+export default function RegisterForm({
+  register,
   error,
-  register
-}: LoginFormProps): ReactElement {
-  const [details, setDetails] = useState({ login: '', password: '' });
+  login
+}: RegisterFormProps): ReactElement {
+  const [details, setDetails] = useState({ userName: '', password: '', email: '' });
 
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
 
-    login(details);
+    register(details);
   };
 
   return (
     <Form onSubmit={submitHandler}>
       <FormInner>
-        <FormHeader>Login</FormHeader>
+        <FormHeader>Register</FormHeader>
         {(error !== "")?(<ErrorMessage>{error}</ErrorMessage>) : ""}
         <FormGroup>
           <Label htmlFor="login">
-            Nazwa użytkownika lub email
+            Nazwa użytkownika
           </Label>
           <Input
               id="login"
               name="login"
               onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-                setDetails({ ...details, login: e.target.value })
+                setDetails({ ...details, userName: e.target.value })
               }
               type="text"
-              value={details.login}
+              value={details.userName}
+            />
+        </FormGroup>
+        <FormGroup>
+          <Label htmlFor="email">
+            Email
+          </Label>
+          <Input
+              id="email"
+              name="email"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+                setDetails({ ...details, email: e.target.value })
+              }
+              type="text"
+              value={details.email}
             />
         </FormGroup>
         <FormGroup>
@@ -60,10 +75,10 @@ export default function LoginForm({
               value={details.password}
             />
         </FormGroup>
-        <SubmitButton type="submit">Zaloguj się</SubmitButton>
+        <SubmitButton type="submit">Zarejestruj się</SubmitButton>
       </FormInner>
       <FormFooter>
-        Nie masz konta? <Anchor onClick={register}>Zarejestruj się</Anchor>
+        Masz już konto? <Anchor onClick={login}>Zaloguj się</Anchor>
       </FormFooter>
     </Form>
   );

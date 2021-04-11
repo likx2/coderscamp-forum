@@ -4,6 +4,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 
 import LoginForm, { LoginDetails } from './LoginForm';
+import RegisterForm, { RegisterDetails } from './RegisterForm';
 
 // Styles
 const ModalWindow = styled.div`
@@ -35,7 +36,10 @@ export default function LoginModal({
   isShowing: boolean;
   hide: ()=> void
 }): ReactElement {
-  const [error, setError] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [registerError, setRegisterError] = useState("");
+  const { isShowing: wantRegister, toggle } = useModal();
+
   const loginHandler = (details: LoginDetails) => {
     axios
       .post('http://localhost:4000/auth/login/', details)
@@ -47,13 +51,32 @@ export default function LoginModal({
       })
       .catch((er) => {
         // details incorrect
-        setError(er.response.data);
+        setLoginError(er.response.data);
+      });
+  };
+
+  const registerHandler = (details: RegisterDetails) => {
+    console.log(details);
+    axios
+      .post('http://localhost:4000/auth/register/', details)
+      .then((result) => {
+        // details correct
+        console.log('Welcome!');
+        toggle();
+      })
+      .catch((er) => {
+        // details incorrect
+        setRegisterError(er.response.data);
       });
   };
 
   return isShowing ? (
     <ModalWindow>
-      <LoginForm error={error} login={loginHandler} />
+      {!wantRegister? 
+        <RegisterForm error={registerError} login={toggle} register={registerHandler}/>:
+        <LoginForm error={loginError} login={loginHandler} register={toggle}/>
+      }
+      
     </ModalWindow>
   ) : (
     <></>
