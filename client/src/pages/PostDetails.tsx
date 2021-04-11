@@ -7,10 +7,8 @@ import ExpandedPost from '../components/ExpandedPost';
 import useFetchPostById from '../utils/useFetchPostById';
 
 const Loader = styled.img`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  display: block;
+  margin: 0 auto;
   border-radius: 20px;
 `;
 

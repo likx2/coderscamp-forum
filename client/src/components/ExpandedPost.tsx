@@ -20,6 +20,7 @@ const Wrapper = styled.div`
 const Title = styled.h2`
   font-size: 40px;
   font-weight: 700;
+  line-height: 49px;
   margin: 0 0 40px;
   text-align: center;
 `;
@@ -40,12 +41,14 @@ const Capture = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 18px 0 0;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 500px;
+  line-height: 24px;
 `;
 const Content = styled.p`
-  font-size: 26px;
+  font-size: 16px;
   font-weight: 500px;
+  line-height: 32px;
   margin: 60px 0 0;
 `;
 

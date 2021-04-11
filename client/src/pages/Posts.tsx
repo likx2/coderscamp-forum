@@ -9,10 +9,8 @@ import Post from '../types/Post';
 import useFetchPosts from '../utils/useFetchPosts';
 
 const Loader = styled.img`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  display: block;
+  margin: 0 auto;
   border-radius: 20px;
 `;
 const POSTS_PER_PAGE = 10;
