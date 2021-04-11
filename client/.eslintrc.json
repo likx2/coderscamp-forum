@@ -60,7 +60,7 @@
     "react/jsx-max-props-per-line": [
       "error",
       {
-        "maximum": 3
+        "maximum": 4
       }
     ],
     "react/jsx-props-no-spreading": [
@@ -81,13 +81,12 @@
     "react/state-in-constructor": ["error", "never"],
     "semi": "error",
     "object-curly-spacing": ["error", "always"],
-    "sort-imports": [
-      "error",
-      {
-        "ignoreCase": true,
-        "ignoreDeclarationSort": true
-      }
-    ]
+    "sort-imports": ["error", {
+      "ignoreCase": true,
+      "ignoreDeclarationSort": true
+    }],
+    "no-underscore-dangle":"off",
+    "arrow-body-style":"off"
   },
   "settings": {
     "react": {

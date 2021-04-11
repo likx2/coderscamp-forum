@@ -8,6 +8,7 @@ export function startupDB(): void {
 
   // Set connection string
   const uri: string = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@cluster0.mbxs0.mongodb.net/${MONGO_DB}?retryWrites=true&w=majority`
+ 
 
   // Connection otions
   const options = {
