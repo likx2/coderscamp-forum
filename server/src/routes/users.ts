@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express'
 import mongoose from 'mongoose'
 import { auth } from '../middleware/auth'
-import { User } from '../models/User'
+import { User } from '../models/user'
 import { AuthenticatedRequest } from '../types/AuthenticatedRequest'
 
 export const usersReducer = express.Router()
