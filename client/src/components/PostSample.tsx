@@ -17,7 +17,7 @@ const StyledLink = styled(Link)`
   border-radius: 15px;
   overflow: hidden;
   transition: box-shadow 0.2s ease-in-out;
-  &:nth-of-type(n + 1) {
+  &:nth-of-type(n + 2) {
     margin: 44px 0 0;
   }
   &:hover {
@@ -29,6 +29,7 @@ const Wrapper = styled.div`
   background-color: #fff;
   padding: 20px;
   color: #3d4443;
+
   @media (max-width: 576px) {
     display: block;
   }
@@ -41,6 +42,7 @@ const Img = styled.img`
   object-fit: cover;
   object-position: center;
   border-radius: 15px;
+
   @media (max-width: 576px) {
     margin: 0 auto;
     max-width: unset;
@@ -48,6 +50,7 @@ const Img = styled.img`
 `;
 const Text = styled.div`
   margin: 0 0 0 27px;
+
   @media (max-width: 576px) {
     margin: 15px 0 0;
   }
@@ -65,6 +68,7 @@ const Capture = styled.div`
   font-weight: 500px;
   line-height: 24px;
   max-width: 400px;
+
   @media (max-width: 576px) {
     display: block;
   }

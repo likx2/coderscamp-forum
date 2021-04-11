@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import axios from 'axios';
+
 import Post from '../types/Post';
 import User from '../types/User';
 
@@ -10,26 +12,30 @@ const useFetchPosts = (url: string, page: number, postsPerPage: number) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetch(
-        `${url}/posts?page=${page}&limit=${postsPerPage}`,
-      );
-      const dataJson = await data.json();
-      const clientPosts: Post[] = await Promise.all(
-        dataJson.currentPosts.map(async (pulledPostJson: Post) => {
-          const author = await fetch(`${url}/users/${pulledPostJson.author}`);
+      try {
+        const data = await (
+          await axios.get(`${url}/posts?page=${page}&limit=${postsPerPage}`)
+        ).data;
+        const clientPosts: Post[] = await Promise.all(
+          data.currentPosts.map(async (clientPost: Post) => {
+            const author = await (
+              await axios.get(`${url}/users/${clientPost.author}`)
+            ).data;
 
-          const authorJson: User = await author.json();
-
-          return { ...pulledPostJson, author: authorJson.userName } as Post;
-        }),
-      );
-      setTotalPosts(dataJson.totalPosts);
-      setPosts(clientPosts);
-      setIsLoading(false);
+            return { ...clientPost, author: author.userName } as Post;
+          }),
+        );
+        setTotalPosts(data.totalPosts);
+        setPosts(clientPosts);
+      } catch (e) {
+        alert(e);
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchData();
   }, [url, page, postsPerPage]);
-  return [isLoading, totalPosts, [...posts]] as [boolean, number, Post[]];
+  return { isLoading, totalPosts, posts: [...posts] };
 };
 
 export default useFetchPosts;

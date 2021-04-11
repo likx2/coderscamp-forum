@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import axios from 'axios';
+
 import Post from '../types/Post';
 
 const useFetchPostById = (url: string, id: string) => {
@@ -9,22 +11,27 @@ const useFetchPostById = (url: string, id: string) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const pulledPost = await fetch(`${url}/posts/${id}`);
+      try {
+        const clientPost = await (await axios.get(`${url}/posts/${id}`)).data;
 
-      const clientPost = await pulledPost.json();
-
-      const pulledAuthor = await fetch(`${url}/users/${clientPost.author}`);
-
-      const clientAuthor = await pulledAuthor.json();
-
-      setPost(clientPost);
-      setAuthor(clientAuthor.userName);
-      setIsLoading(false);
+        const clientAuthor = await (
+          await axios.get(`${url}/users/${clientPost.author}`)
+        ).data;
+        setPost(clientPost);
+        setAuthor(clientAuthor.userName);
+      } catch (e) {
+        alert(e);
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchData();
   }, [url, id]);
 
-  return [isLoading, { ...post, author }] as [boolean, Post];
+  return { isLoading, post: { ...post, author } } as {
+    isLoading: boolean;
+    post: Post;
+  };
 };
 
 export default useFetchPostById;
