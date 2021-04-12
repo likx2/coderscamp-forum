@@ -15,7 +15,7 @@ const Loader = styled.img`
 `;
 const POSTS_PER_PAGE = 10;
 const Posts = ({ match }: any) => {
-  console.log(match.params);
+
   const { isLoading, totalPosts, posts } = useFetchPosts(
     match.url,
     match.params.page,
