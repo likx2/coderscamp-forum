@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import searchIcon from '../assets/search.svg';
+import useFetchTopHashtags from '../utils/useFetchTopHashtags';
 import LoginModal, { useModal } from './login/LoginModal';
 
 const Header = styled.header`
@@ -144,14 +145,7 @@ const SwitchInput = styled.input`
 `;
 
 const Navbar: FC = () => {
-  const hashtags = [
-    'Świat',
-    'Zdrowie',
-    'Sport',
-    'Giełda',
-    'Programowanie',
-    'Uroda',
-  ];
+  const hashtags = useFetchTopHashtags();
 
   const { isShowing, toggle } = useModal();
 
@@ -168,22 +162,25 @@ const Navbar: FC = () => {
             <SwitchInput id="checkbox" type="checkbox" />
             <SwitchLabel htmlFor="checkbox" />
           </SwitchWrapper>
-          {localStorage.getItem('auth-token') !== ""?
-          <LoginButton onClick={() => {
-            localStorage.setItem('auth-token', "");
-            toggle();
-          }}>Wyloguj się</LoginButton>:
-          <LoginButton onClick={toggle}>Zaloguj się</LoginButton>
-        }
+          {localStorage.getItem('auth-token') !== '' ? (
+            <LoginButton
+              onClick={() => {
+                localStorage.setItem('auth-token', '');
+                toggle();
+              }}
+            >
+              Wyloguj się
+            </LoginButton>
+          ) : (
+            <LoginButton onClick={toggle}>Zaloguj się</LoginButton>
+          )}
         </ButtonsWrapper>
-        
-        <LoginModal hide={toggle} isShowing={isShowing}/>
+
+        <LoginModal hide={toggle} isShowing={isShowing} />
       </Wrapper>
       <HashtagWrapper>
         {hashtags.map((h) => (
-          <Hashtag key={h} to={`url../ranking/${h}`}>
-            {h}
-          </Hashtag>
+          <Hashtag to={`/posts/ranking/${h}/1`}>{h}</Hashtag>
         ))}
       </HashtagWrapper>
     </Header>

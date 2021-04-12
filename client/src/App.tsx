@@ -17,7 +17,11 @@ const App: FC = () => {
         <Router>
           <Layout>
             <Switch>
-              <Route component={Posts} exact path="/posts/:page" />
+              <Route
+                component={Posts}
+                exact
+                path={['/posts/:page', '/posts/ranking/:hashtag/:page']}
+              />
               <Route component={PostDetails} exact path="/posts/:page/:id" />
             </Switch>
           </Layout>
