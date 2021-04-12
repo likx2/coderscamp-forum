@@ -18,9 +18,10 @@ const useFetchPosts = (href: string, page: number, postsPerPage: number) => {
 
     const fetchData = async () => {
       try {
-        const data = await (
-          await axios.get(`${DB}${url}?page=${page}&limit=${postsPerPage}`)
-        ).data;
+        const { data } = await axios.get(
+          `${DB}${url}?page=${page}&limit=${postsPerPage}`,
+        );
+
         const clientPosts: Post[] = await Promise.all(
           data.currentPosts.map(async (clientPost: Post) => {
             const author = await (
@@ -33,7 +34,7 @@ const useFetchPosts = (href: string, page: number, postsPerPage: number) => {
         setTotalPosts(data.totalPosts);
         setPosts(clientPosts);
       } catch (e) {
-        alert(e);
+        console.log(e);
       } finally {
         setIsLoading(false);
       }
