@@ -144,6 +144,15 @@ const SwitchInput = styled.input`
   }
 `;
 
+const AddButton = styled.button`
+  border: none;
+  width: 100%;
+  font-size: 20px;
+  font-family: 'Montserrat', sans-serif;
+  padding: 10px;
+  cursor: pointer;
+`;
+
 const Navbar: FC = () => {
   const hashtags = useFetchTopHashtags();
 
@@ -152,7 +161,7 @@ const Navbar: FC = () => {
   return (
     <Header>
       <Wrapper>
-        <Logo>CampForum</Logo>
+        <Logo><Link to="/posts/1">CampForum</Link></Logo>
         <SearchBarWrapper>
           <SearchIcon src={searchIcon} />
           <SearchBar type="text" />
@@ -183,6 +192,11 @@ const Navbar: FC = () => {
           <Hashtag to={`/posts/ranking/${h}/1`}>{h}</Hashtag>
         ))}
       </HashtagWrapper>
+      {localStorage.getItem('auth-token') ? (
+        <AddButton>
+          <Link to="/add/post">Dodaj Post</Link>
+        </AddButton>
+      ) : null}
     </Header>
   );
 };

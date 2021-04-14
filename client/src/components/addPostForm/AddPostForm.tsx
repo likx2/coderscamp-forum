@@ -1,9 +1,10 @@
 import React, { ReactElement, useState } from 'react';
 
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 import {
-ErrorMessage,
+  ErrorMessage,
   Form,
   FormGroup,
   FormInner,
@@ -20,32 +21,41 @@ export default function AddPostForm() {
     hashtags: '',
   });
 
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    const formatedHashtags  = !details.hashtags? [] : details.hashtags.split(" ");
+    setError('');
+    const formatedHashtags = !details.hashtags
+      ? []
+      : details.hashtags.split(' ');
     const formatedDetails = {
       ...details,
       hashtags: formatedHashtags,
     };
     const url = process.env.URL! || 'http://localhost:4000';
 
-    axios.post(`${url}/posts/`, formatedDetails, 
-      { headers: { 'x-auth-token': localStorage.getItem('auth-token') } })
-        .then((res)=>{
-          console.log('OK');
-        })
-        .catch((er)=>{
-          setError(er.response.data);
+    axios
+      .post(`${url}/posts/`, formatedDetails, {
+        headers: { 'x-auth-token': localStorage.getItem('auth-token') },
+      })
+      .then((res) => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Post Utworzony pomyślnie',
+          showConfirmButton: false,
+          timer: 1500,
         });
+      })
+      .catch((er) => {
+        setError(er.response.data);
+      });
   };
 
   return (
     <Form>
       <FormInner>
-        {(error)&&(<ErrorMessage>{error}</ErrorMessage>)}
+        {error && <ErrorMessage>{error}</ErrorMessage>}
         <FormGroup>
           <Label htmlFor="title">Tytuł</Label>
           <Input
