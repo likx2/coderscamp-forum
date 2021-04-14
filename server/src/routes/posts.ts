@@ -190,7 +190,6 @@ postRouter.get('/ranking/:hashtag', async (req: AuthenticatedRequest, res) => {
           totalPosts: allPosts,
           currentPosts: currentPosts
         }
-        console.log(data)
         res.status(200).send(data)
       }
   }

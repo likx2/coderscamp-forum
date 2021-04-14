@@ -46,7 +46,6 @@ const Pagination = ({
   const clickHandler = (e: any) => {
     e.preventDefault();
     const actualUrl = url.slice(0, -1);
-    console.log(url);
     history.push(`${actualUrl}${e.target.textContent}`);
     setCurrentPage(e.target.textContent);
   };

@@ -5,7 +5,7 @@ import { Post } from '../models/Post'
 export const topHashtagRouter = Router()
 
 topHashtagRouter.get('/', async (req: Request, res: Response) => {
-    const allHastags = await Hashtag.find().sort({ amount: -1 }).limit(10)
+    const allHastags = await Hashtag.find().sort({ amount: -1 }).limit(6)
     res.send(allHastags)
 
 })

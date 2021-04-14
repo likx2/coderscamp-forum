@@ -21,8 +21,6 @@ const useFetchPosts = (href: string, page: number, postsPerPage: number) => {
         const { data } = await axios.get(
           `${DB}${url}?page=${page}&limit=${postsPerPage}`,
         );
-        
-        console.log(data);
 
         const clientPosts: Post[] = await Promise.all(
           data.currentPosts.map(async (clientPost: Post) => {
