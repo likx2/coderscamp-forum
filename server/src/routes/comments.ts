@@ -1,4 +1,4 @@
-import { Response, Router } from 'express'
+import { Request,Response, Router } from 'express'
 import { auth } from '../middleware/auth'
 import {
   Comment,
@@ -11,14 +11,28 @@ import { AuthenticatedRequest } from '../types/AuthenticatedRequest'
 
 export const commentsReducer = Router()
 
-commentsReducer.get('/:id', async (req: AuthenticatedRequest, res: Response) => {
-  const { id } = req.params
-  await Comment.findById(id)
-    .then((comment) => {
-      if (comment) {
-        res.status(200).send(comment)
+// commentsReducer.get('/:id', async (req: AuthenticatedRequest, res: Response) => {
+//   const { id } = req.params
+//   await Comment.findById(id)
+//     .then((comment) => {
+//       if (comment) {
+//         res.status(200).send(comment)
+//       } else {
+//         res.status(404).send(`Comment with ${id} not found!`)
+//       }
+//     })
+//     .catch((err) => {
+//       res.status(404).send(err.toString())
+//     })
+// })
+commentsReducer.get('/:postId', async (req: Request, res: Response) => {
+  const { postId } = req.params
+  await Comment.find({post:postId})
+    .then((comments) => {
+      if (comments) {
+        res.status(200).send(comments)
       } else {
-        res.status(404).send(`Comment with ${id} not found!`)
+        res.status(404).send(`Post with ${postId} not found!`)
       }
     })
     .catch((err) => {
@@ -43,6 +57,7 @@ commentsReducer.post('/', auth, async (req: AuthenticatedRequest, res: Response)
     content: req.body.content,
   })
   await comment.save()
+  await Post.findByIdAndUpdate(req.body.post,{$inc:{commentsCount:1}})
 
   res.status(200).send(comment)
 })

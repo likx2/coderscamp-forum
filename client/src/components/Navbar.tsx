@@ -26,8 +26,10 @@ const Wrapper = styled.nav`
   margin: 20px;
 `;
 
-const Logo = styled.h1`
+const Logo = styled(Link)`
   font-size: 27px;
+  font-weight: 600;
+  color: #3d4443;
   cursor: pointer;
   text-decoration: none;
   color: #3d4443;
@@ -162,9 +164,7 @@ const Navbar: FC = () => {
   return (
     <Header>
       <Wrapper>
-        <Link to="/posts/1">
-          <Logo>CampForum</Logo>
-        </Link>
+        <Logo to="/posts/1">CampForum</Logo>
         <SearchBarWrapper>
           <SearchIcon src={searchIcon} />
           <SearchBar type="text" />

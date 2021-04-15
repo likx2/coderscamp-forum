@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import Post from '../types/Post';
 
 const Container = styled.div`
-  padding: 55px 0 0;
-  background-color: #fff;
+  padding: 55px 0 20px;
+  background: rgba(255, 255, 255, 0.45);
   border-radius: 15px;
 `;
 const Wrapper = styled.div`

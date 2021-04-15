@@ -233,32 +233,32 @@ postRouter.get('/ranking/:hashtag', async (req: AuthenticatedRequest, res) => {
   }
 })
 
-postRouter.post('/:id/comments', auth, async (req: AuthenticatedRequest, res: Response) => {
-  Post.findByIdAndUpdate({ _id: req.params.id }, { $inc: { commentsCount: 1 } })
-    .then((post) => {
-      if (!post) {
-        return res.status(404).send('Post not found')
-      }
-      const { error, value } = validateNewComment(req.body)
-      if (error) {
-        return res.status(400).send(error.details[0].message)
-      }
+// postRouter.post('/:id/comments', auth, async (req: AuthenticatedRequest, res: Response) => {
+//   Post.findByIdAndUpdate({ _id: req.params.id }, { $inc: { commentsCount: 1 } })
+//     .then((post) => {
+//       if (!post) {
+//         return res.status(404).send('Post not found')
+//       }
+//       const { error, value } = validateNewComment(req.body)
+//       if (error) {
+//         return res.status(400).send(error.details[0].message)
+//       }
 
-      const newComment = new Comment({
-        ...value,
-        author: req.user?._id,
-        post: post._id,
-      })
+//       const newComment = new Comment({
+//         ...value,
+//         author: req.user?._id,
+//         post: post._id,
+//       })
 
-      newComment.save((err) => {
-        if (err) {
-          res.status(401).send(err)
-        } else {
-          res.status(201).send(newComment)
-        }
-      })
-    })
-    .catch((err) => {
-      return res.status(403).send('Wrong request.')
-    })
-})
+//       newComment.save((err) => {
+//         if (err) {
+//           res.status(401).send(err)
+//         } else {
+//           res.status(201).send(newComment)
+//         }
+//       })
+//     })
+//     .catch((err) => {
+//       return res.status(403).send('Wrong request.')
+//     })
+// })

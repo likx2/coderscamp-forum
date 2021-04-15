@@ -78,8 +78,8 @@ const Content = styled.p`
   font-size: 18px;
   margin: 8px 0 0;
 `;
+const CHARACTERS_PER_POST_SAMPLE = 80;
 const PostSample = ({ post, currentPage }: PostSampleProps) => {
-  const CHARACTERS_PER_POST_SAMPLE = 80;
   return (
     <StyledLink to={`/posts/${currentPage}/${post._id}`}>
       <Wrapper>
