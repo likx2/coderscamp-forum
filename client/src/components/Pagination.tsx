@@ -65,9 +65,6 @@ const Pagination = ({
   const activeHandler = (targetNum: number, currentNum: number): boolean => {
     if (targetNum === currentNum) return true;
     return false;
-
-    // history.push(`${actualUrl}${e.target.textContent}`);
-    // setCurrentPage(e.target.textContent);
   };
 
   return (

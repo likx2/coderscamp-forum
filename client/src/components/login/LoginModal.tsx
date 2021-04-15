@@ -7,9 +7,27 @@ import LoginForm, { LoginDetails } from './LoginForm';
 import RegisterForm, { RegisterDetails } from './RegisterForm';
 
 // Styles
-const ModalWindow = styled.div`
+const Wrapper = styled.div<{ active: boolean }>`
   position: absolute;
-  bottom: 50%;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: ${(props) => (props.active ? 'flex' : 'none')};
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+`;
+const CloseBtn = styled.div`
+  position: absolute;
+  right: 80px;
+  top: 40px;
+  font-size: 50px;
+  color: #ffff;
+  cursor: pointer;
+`;
+const ModalWindow = styled.div`
   background: rgba(255, 255, 255);
   border-radius: 15px;
   padding: 15px;
@@ -31,13 +49,13 @@ export const useModal = () => {
 
 export default function LoginModal({
   isShowing,
-  hide
+  hide,
 }: {
   isShowing: boolean;
-  hide: ()=> void
+  hide: () => void;
 }): ReactElement {
-  const [loginError, setLoginError] = useState("");
-  const [registerError, setRegisterError] = useState("");
+  const [loginError, setLoginError] = useState('');
+  const [registerError, setRegisterError] = useState('');
   const { isShowing: wantRegister, toggle } = useModal();
 
   const loginHandler = (details: LoginDetails) => {
@@ -71,13 +89,24 @@ export default function LoginModal({
   };
 
   return isShowing ? (
-    <ModalWindow>
-      {!wantRegister? 
-        <RegisterForm error={registerError} login={toggle} register={registerHandler}/>:
-        <LoginForm error={loginError} login={loginHandler} register={toggle}/>
-      }
-      
-    </ModalWindow>
+    <Wrapper active={isShowing}>
+      <CloseBtn onClick={() => hide()}>&times;</CloseBtn>
+      <ModalWindow>
+        {!wantRegister ? (
+          <RegisterForm
+            error={registerError}
+            login={toggle}
+            register={registerHandler}
+          />
+        ) : (
+          <LoginForm
+            error={loginError}
+            login={loginHandler}
+            register={toggle}
+          />
+        )}
+      </ModalWindow>
+    </Wrapper>
   ) : (
     <></>
   );
