@@ -8,8 +8,7 @@ const GlobalStyle = createGlobalStyle`
 }
   body {
     font-family: 'Montserrat', sans-serif;
-    background-color: ${(props) =>
-      props.theme.colors.lightTheme ? '#F4F4F4' : '#3D4443'};
+    background-color: ${({ theme }) => theme.colors.body}
   }
 
   a,input,button,textarea{
@@ -17,7 +16,6 @@ const GlobalStyle = createGlobalStyle`
     border:none;
     &:focus,&:active{
       outline: none
-      
     }
   }
 `;

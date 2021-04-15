@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import { FC, useState } from 'react';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 
 import { ThemeProvider } from 'styled-components';
@@ -7,15 +7,22 @@ import Layout from './components/Layout';
 import PostDetails from './pages/PostDetails';
 import Posts from './pages/Posts';
 import GlobalStyle from './styles/GlobalStyle';
-import theme from './styles/mainTheme';
+import dark from './styles/themes/dark';
+import light from './styles/themes/light';
 
 const App: FC = () => {
+  const [theme, setTheme] = useState(light);
+
+  const toggleTheme = () => {
+    setTheme(theme.title === 'light' ? dark : light);
+  };
+
   return (
     <>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <Router>
-          <Layout>
+          <Layout toggleTheme={toggleTheme}>
             <Switch>
               <Route
                 component={Posts}

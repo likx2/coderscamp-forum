@@ -11,9 +11,26 @@ const StyledMain = styled.main`
   margin: 20px auto;
 `;
 
-const Layout: FC = ({ children }) => (
+interface Props {
+  // theme: {
+  //   title: string;
+  //   colors: {
+  //     body: string;
+  //     text: string;
+  //     primaryBtn: string;
+  //     primaryColor: string;
+  //     secondaryColor: string;
+  //     thirdColor: string;
+  //     fourthColor: string;
+  //     fifthColor: string;
+  //   };
+  // };
+  toggleTheme(): void;
+}
+
+const Layout: FC<Props> = ({ children, toggleTheme }) => (
   <>
-    <Navbar />
+    <Navbar toggleTheme={toggleTheme} />
     <StyledMain>{children}</StyledMain>
     <Footer />
   </>

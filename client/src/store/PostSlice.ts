@@ -77,8 +77,9 @@ export const postsSelector = (state: { posts: PostState }) => state.posts;
 
 //  more than 130 characters... ONLY FOR TESTS
 const token1 =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDNmYjNmZDRiZmE4ZjJmYjAzNGIwZmUiLCJpYXQi';
-const token2 = 'OjE2MTQ3ODc2MzJ9.gmWyX7a2vwtZ526eLTUFF3RRRHI2yMDdHEddj4eQ6mQ';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDVhMDhkNmY1MThkMTQxYTBhZmUwMDQiLCJpc0FkbWluIjpmYWxzZSwiaW';
+const token2 =
+  'F0IjoxNjE4MzUwNDcwfQ.aVkdVzjqLoX3BUGUQrfdST6GDcHMUXQaxtRCLZOPvks';
 const token = token1 + token2;
 
 export const getPosts = (): AppThunk => async (dispatch) => {

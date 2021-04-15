@@ -51,7 +51,7 @@ const HashtagsContainer = styled(LinksContainer)`
 `;
 
 const StyledLink = styled(Link)`
-  color: rgba(61, 68, 67, 0.8);
+  color: ${({ theme }) => theme.colors.primaryColor};
   text-decoration: none;
   display: inline-block;
   margin-right: 6px;
@@ -78,7 +78,7 @@ const StyledNormalHashtag = styled(StyledLink)`
 `;
 
 const Sign = styled.h6`
-  color: rgba(61, 68, 67, 0.6);
+  color: ${({ theme }) => theme.colors.primaryColor};
   font-weight: 400;
   margin: 15px 0;
 `;

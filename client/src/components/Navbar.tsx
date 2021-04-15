@@ -28,6 +28,7 @@ const Wrapper = styled.nav`
   max-width: 1600px;
   padding: 8px 0;
   background: rgba(255, 255, 255, 0.45);
+  background: ${({ theme }) => theme.colors.primaryColor};
   margin-top: 20px;
 
   @media (min-width: 450px) {
@@ -38,7 +39,8 @@ const Wrapper = styled.nav`
 
 const Logo = styled.h1`
   font-size: 20px;
-  color: #3d4443;
+  /* color: #3d4443; */
+  color: ${({ theme }) => theme.colors.text};
   cursor: pointer;
 
   @media (min-width: 390px) {
@@ -48,8 +50,6 @@ const Logo = styled.h1`
 
 const SearchBarWrapper = styled.div`
   height: 50px;
-  /* display: none; */
-
   position: absolute;
   top: 85px;
   width: 80%;
@@ -73,7 +73,7 @@ const SearchBarWrapper = styled.div`
 const SearchBar = styled.input`
   border: none;
   outline: none;
-  background: #e7e8e6;
+  background: ${({ theme }) => theme.colors.thirdColor};
   border-radius: 20px;
   height: 40px;
   width: 100%;
@@ -86,7 +86,7 @@ const SearchBar = styled.input`
   }
 
   @media (min-width: 1100px) {
-    background: #f1f1f0;
+    background: ${({ theme }) => theme.colors.secondaryColor};
   }
 `;
 
@@ -126,7 +126,8 @@ const ButtonsWrapper = styled.div`
 `;
 
 const LoginButton = styled.button`
-  background: rgba(255, 234, 137, 0.9);
+  /* background: rgba(255, 234, 137, 0.9); */
+  background: ${({ theme }) => theme.colors.primaryBtn};
   height: 30px;
   width: 100px;
   border: none;
@@ -153,7 +154,8 @@ const HashtagWrapper = styled.div`
   width: 90%;
   max-width: 1400px;
   padding: 15px 0;
-  background: rgba(255, 255, 255, 0.45);
+  /* background: rgba(255, 255, 255, 0.45); */
+  background: ${({ theme }) => theme.colors.primaryColor};
   /* margin-top: 30px; */
   margin-top: 70px;
 
@@ -170,7 +172,7 @@ const HashtagWrapper = styled.div`
 
 const Hashtag = styled(Link)`
   text-decoration: none;
-  color: rgba(61, 68, 67, 0.7);
+  color: ${({ theme }) => theme.colors.fourthColor};
   font-weight: 500;
   margin: 5px 15px;
 
@@ -218,7 +220,7 @@ const SwitchInput = styled.input`
   width: 42px;
   height: 26px;
   &:checked + ${SwitchLabel} {
-    background: rgba(255, 234, 137, 0.9);
+    background: ${({ theme }) => theme.colors.primaryBtn};
     &::after {
       content: '';
       display: block;
@@ -231,7 +233,11 @@ const SwitchInput = styled.input`
   }
 `;
 
-const Navbar: FC = () => {
+interface Props {
+  toggleTheme(): void;
+}
+
+const Navbar: FC<Props> = ({ toggleTheme }) => {
   const hashtags = useFetchTopHashtags();
 
   const { isShowing, toggle } = useModal();
@@ -246,7 +252,7 @@ const Navbar: FC = () => {
         </SearchBarWrapper>
         <ButtonsWrapper>
           <SwitchWrapper>
-            <SwitchInput id="checkbox" type="checkbox" />
+            <SwitchInput id="checkbox" onChange={toggleTheme} type="checkbox" />
             <SwitchLabel htmlFor="checkbox" />
           </SwitchWrapper>
           {localStorage.getItem('auth-token') !== '' ? (
