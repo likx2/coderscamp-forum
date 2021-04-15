@@ -7,6 +7,7 @@ interface PaginationProps {
   postsPerPage: number;
   totalPosts: number;
   setCurrentPage(a: number): void;
+  url: string;
 }
 const Wrapper = styled.div`
   display: flex;
@@ -34,6 +35,7 @@ const Pagination = ({
   postsPerPage,
   totalPosts,
   setCurrentPage,
+  url,
 }: PaginationProps) => {
   const history = useHistory();
   const pageNumbers = [];
@@ -43,7 +45,8 @@ const Pagination = ({
 
   const clickHandler = (e: any) => {
     e.preventDefault();
-    history.push(`/posts/${e.target.textContent}`);
+    const actualUrl = url.slice(0, -1);
+    history.push(`${actualUrl}${e.target.textContent}`);
     setCurrentPage(e.target.textContent);
   };
 

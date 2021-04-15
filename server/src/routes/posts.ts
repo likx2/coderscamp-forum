@@ -163,8 +163,18 @@ postRouter.get('/ranking/:hashtag', async (req: AuthenticatedRequest, res) => {
   const page: number = req.query.page ? parseInt(req.query.page as string) : 1
   const limit: number = req.query.limit ? parseInt(req.query.limit as string) : 10
 
-  const getSortedBy = (sortingObject: any, hashtag: string) => {
-    Post.find({hashtags: hashtag})
+  const getSortedBy = async (sortingObject: any, hashtag: string) => {
+    const allPosts = await Post.find({hashtags: hashtag})
+    .sort(sortingObject)
+    .then((data) => {
+      if (!data) {
+        res.status(404).send('None posts found.')
+      } else {
+        return data.length
+      }
+    })
+
+    const currentPosts = await Post.find({hashtags: hashtag})
       .sort(sortingObject)
       .skip((page - 1) * limit)
       .limit(limit)
@@ -172,12 +182,16 @@ postRouter.get('/ranking/:hashtag', async (req: AuthenticatedRequest, res) => {
         if (!data) {
           res.status(404).send('None posts found.')
         } else {
-          const posts = {
-            currentPosts: data
-          }
-          res.status(200).send(posts)
+          return data
         }
       })
+      if(currentPosts){
+        const data = {
+          totalPosts: allPosts,
+          currentPosts: currentPosts
+        }
+        res.status(200).send(data)
+      }
   }
 
   const getSortedByReactions = (hashtag: string) => {

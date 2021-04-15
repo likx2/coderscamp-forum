@@ -27,7 +27,6 @@ const useFetchPosts = (href: string, page: number, postsPerPage: number) => {
             const author = await (
               await axios.get(`${DB}/users/${clientPost.author}`)
             ).data;
-
             return { ...clientPost, author: author.userName } as Post;
           }),
         );
