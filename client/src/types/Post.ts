@@ -1,13 +1,8 @@
-export default interface Post {
-    _id: string
-    author: string
-    title: string
-    content: string
-    imageUrl: string
-    hashtags: string[]
-    commentsCount: number
-    createdAt: string
-    updatedAt: string
-    _v: number
-    reactions: []
+import BasicContentInfo from './BasicContentInfo';
+export default interface Post extends BasicContentInfo {
+  title: string;
+  imageUrl: string;
+  hashtags: string[];
+  commentsCount: number;
+  _v: number;
 }

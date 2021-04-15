@@ -4,6 +4,7 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 
 import Post from '../types/Post';
+import getDataWithAuthors from './getDataWithAuthors';
 
 dotenv.config();
 
@@ -22,17 +23,12 @@ const useFetchPosts = (href: string, page: number, postsPerPage: number) => {
           `${DB}${url}?page=${page}&limit=${postsPerPage}`,
         );
 
-        const clientPosts: Post[] = await Promise.all(
-          data.currentPosts.map(async (clientPost: Post) => {
-            const author = await (
-              await axios.get(`${DB}/users/${clientPost.author}`)
-            ).data;
-
-            return { ...clientPost, author: author.userName } as Post;
-          }),
+        const clientPosts = await getDataWithAuthors(
+          `${DB}`,
+          data.currentPosts,
         );
         setTotalPosts(data.totalPosts);
-        setPosts(clientPosts);
+        setPosts(clientPosts as Post[]);
       } catch (e) {
         console.log(e);
       } finally {

@@ -15,7 +15,6 @@ const Loader = styled.img`
 `;
 const POSTS_PER_PAGE = 10;
 const Posts = ({ match }: any) => {
-
   const { isLoading, totalPosts, posts } = useFetchPosts(
     match.url,
     match.params.page,
@@ -29,6 +28,7 @@ const Posts = ({ match }: any) => {
         <PostSample currentPage={currentPage} key={post._id} post={post} />
       ))}
       <Pagination
+        currentPage={currentPage}
         postsPerPage={POSTS_PER_PAGE}
         setCurrentPage={setCurrentPage}
         totalPosts={totalPosts}

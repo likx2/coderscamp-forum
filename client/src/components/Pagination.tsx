@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { MouseEvent, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import styled from 'styled-components';
@@ -6,8 +6,10 @@ import styled from 'styled-components';
 interface PaginationProps {
   postsPerPage: number;
   totalPosts: number;
+  currentPage: number;
   setCurrentPage(a: number): void;
 }
+
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -18,39 +20,59 @@ const Wrapper = styled.div`
   background-color: #ffff;
   border-radius: 15px;
 `;
-const PageBtn = styled.button`
+
+const PageBtn = styled.button<{ active: boolean }>`
   width: 48px;
   height: 42px;
-  background-color: #e7e8e6;
+  background-color: ${(props) => (props.active ? '#3D4443' : '#e7e8e6')};
   border-radius: 10px;
   font-family: 'Montserrat', sans-serif;
   font-size: 24px;
   font-weight: 600;
-  color: #3d4443;
+  color: ${(props) => (props.active ? '#E7E8E6' : '#3D4443')};
   cursor: pointer;
   margin: 0 8px;
 `;
+
 const Pagination = ({
   postsPerPage,
   totalPosts,
+  currentPage,
   setCurrentPage,
 }: PaginationProps) => {
   const history = useHistory();
-  const pageNumbers = [];
-  for (let i = 0; i < Math.ceil(totalPosts / postsPerPage); i += 1) {
-    pageNumbers[i] = i + 1;
-  }
 
-  const clickHandler = (e: any) => {
+  const [pages, setPages] = useState<number[]>([]);
+
+  useEffect(() => {
+    const pageNumbers = [];
+    const numberOfPages = Math.ceil(totalPosts / postsPerPage);
+    for (let i = 0; i < numberOfPages; i += 1) {
+      pageNumbers[i] = i + 1;
+    }
+    setPages(pageNumbers);
+  }, [totalPosts, postsPerPage]);
+
+  const clickHandler = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    history.push(`/posts/${e.target.textContent}`);
-    setCurrentPage(e.target.textContent);
+    history.push(`/posts/${(e.target as HTMLButtonElement).textContent}`);
+    setCurrentPage(+(e.target as HTMLButtonElement).textContent!);
+  };
+
+  const activeHandler = (targetNum: number, currentNum: number): boolean => {
+    if (targetNum === currentNum) return true;
+    return false;
   };
 
   return (
     <Wrapper>
-      {pageNumbers.map((number: number) => (
-        <PageBtn key={number} onClick={clickHandler} type="button">
+      {pages.map((number: number) => (
+        <PageBtn
+          active={activeHandler(currentPage, number)}
+          key={number}
+          onClick={clickHandler}
+          type="button"
+        >
           {number}
         </PageBtn>
       ))}

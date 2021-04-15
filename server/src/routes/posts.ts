@@ -149,7 +149,7 @@ postRouter.get('/', async (req: AuthenticatedRequest, res) => {
     })
 })
 
-postRouter.get('/ranking/:hashtag', auth, async (req: AuthenticatedRequest, res) => {
+postRouter.get('/ranking/:hashtag', async (req: AuthenticatedRequest, res) => {
   const sortingTypes: string[] = ['date', 'reactions', 'comments']
   const sortingDirections: string[] = ['descending', 'ascending']
   const { hashtag } = req.params
@@ -164,15 +164,31 @@ postRouter.get('/ranking/:hashtag', auth, async (req: AuthenticatedRequest, res)
   const limit: number = req.query.limit ? parseInt(req.query.limit as string) : 10
 
 
+  // const getSortedBy = (sortingObject: any, hashtag: string) => {
+  //   Post.find()
+  //     .sort(sortingObject)
+  //     .skip((page - 1) * limit)
+  //     .limit(limit)
+  //     .then((posts) => {
+  //       if (!posts) {
+  //         res.status(404).send('None posts found.')
+  //       } else {
+  //         res.status(200).send(posts)
+  //       }
+  //     })
+  // }
   const getSortedBy = (sortingObject: any, hashtag: string) => {
-    Post.find()
+    Post.find({hashtags: hashtag})
       .sort(sortingObject)
       .skip((page - 1) * limit)
       .limit(limit)
-      .then((posts) => {
-        if (!posts) {
+      .then((data) => {
+        if (!data) {
           res.status(404).send('None posts found.')
         } else {
+          const posts = {
+            currentPosts: data
+          }
           res.status(200).send(posts)
         }
       })
@@ -217,32 +233,32 @@ postRouter.get('/ranking/:hashtag', auth, async (req: AuthenticatedRequest, res)
   }
 })
 
-postRouter.post('/:id/comments', auth, async (req: AuthenticatedRequest, res: Response) => {
-  Post.findByIdAndUpdate({ _id: req.params.id }, { $inc: { commentsCount: 1 } })
-    .then((post) => {
-      if (!post) {
-        return res.status(404).send('Post not found')
-      }
-      const { error, value } = validateNewComment(req.body)
-      if (error) {
-        return res.status(400).send(error.details[0].message)
-      }
+// postRouter.post('/:id/comments', auth, async (req: AuthenticatedRequest, res: Response) => {
+//   Post.findByIdAndUpdate({ _id: req.params.id }, { $inc: { commentsCount: 1 } })
+//     .then((post) => {
+//       if (!post) {
+//         return res.status(404).send('Post not found')
+//       }
+//       const { error, value } = validateNewComment(req.body)
+//       if (error) {
+//         return res.status(400).send(error.details[0].message)
+//       }
 
-      const newComment = new Comment({
-        ...value,
-        author: req.user?._id,
-        post: post._id,
-      })
+//       const newComment = new Comment({
+//         ...value,
+//         author: req.user?._id,
+//         post: post._id,
+//       })
 
-      newComment.save((err) => {
-        if (err) {
-          res.status(401).send(err)
-        } else {
-          res.status(201).send(newComment)
-        }
-      })
-    })
-    .catch((err) => {
-      return res.status(403).send('Wrong request.')
-    })
-})
+//       newComment.save((err) => {
+//         if (err) {
+//           res.status(401).send(err)
+//         } else {
+//           res.status(201).send(newComment)
+//         }
+//       })
+//     })
+//     .catch((err) => {
+//       return res.status(403).send('Wrong request.')
+//     })
+// })
