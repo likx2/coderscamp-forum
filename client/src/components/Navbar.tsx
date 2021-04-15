@@ -31,6 +31,8 @@ const Logo = styled(Link)`
   font-weight: 600;
   color: #3d4443;
   cursor: pointer;
+  text-decoration: none;
+  color: #3d4443;
 `;
 
 const SearchBarWrapper = styled.div`
@@ -145,6 +147,15 @@ const SwitchInput = styled.input`
   }
 `;
 
+const AddButton = styled.button`
+  border: none;
+  width: 100%;
+  font-size: 20px;
+  font-family: 'Montserrat', sans-serif;
+  padding: 10px;
+  cursor: pointer;
+`;
+
 const Navbar: FC = () => {
   const hashtags = useFetchTopHashtags();
 
@@ -184,6 +195,11 @@ const Navbar: FC = () => {
           <Hashtag to={`/posts/ranking/${h}/1`}>{h}</Hashtag>
         ))}
       </HashtagWrapper>
+      {localStorage.getItem('auth-token') ? (
+        <AddButton>
+          <Link to="/add/post">Dodaj Post</Link>
+        </AddButton>
+      ) : null}
     </Header>
   );
 };

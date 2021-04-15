@@ -28,10 +28,11 @@ const Posts = ({ match }: any) => {
         <PostSample currentPage={currentPage} key={post._id} post={post} />
       ))}
       <Pagination
-        currentPage={currentPage}
+        currentPage={+match.url.match(/\d/)['0']}
         postsPerPage={POSTS_PER_PAGE}
         setCurrentPage={setCurrentPage}
         totalPosts={totalPosts}
+        url={match.url}
       />
     </div>
   );

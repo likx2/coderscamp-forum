@@ -8,6 +8,7 @@ interface PaginationProps {
   totalPosts: number;
   currentPage: number;
   setCurrentPage(a: number): void;
+  url: string;
 }
 
 const Wrapper = styled.div`
@@ -39,6 +40,7 @@ const Pagination = ({
   totalPosts,
   currentPage,
   setCurrentPage,
+  url,
 }: PaginationProps) => {
   const history = useHistory();
 
@@ -55,13 +57,17 @@ const Pagination = ({
 
   const clickHandler = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    history.push(`/posts/${(e.target as HTMLButtonElement).textContent}`);
+    const actualUrl = url.slice(0, -1);
+    history.push(`${actualUrl}${(e.target as HTMLButtonElement).textContent}`);
     setCurrentPage(+(e.target as HTMLButtonElement).textContent!);
   };
 
   const activeHandler = (targetNum: number, currentNum: number): boolean => {
     if (targetNum === currentNum) return true;
     return false;
+
+    // history.push(`${actualUrl}${e.target.textContent}`);
+    // setCurrentPage(e.target.textContent);
   };
 
   return (
