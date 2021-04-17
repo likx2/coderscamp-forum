@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -50,11 +50,21 @@ const PostDetails = ({ match }: any) => {
   const { isLoading, post, comments } = useFetchPostById(match.params.id);
   const [isBtnActive, setIsBtnActive] = useState<boolean>(false);
   const [content, setContent] = useState<string>('');
+  const [token, setToken] = useState<string | null>(null);
   const toggleCommentForm = () => {
     setIsBtnActive(!isBtnActive);
     setContent('');
   };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const pulledToken = localStorage.getItem('auth-token');
 
+    if (pulledToken) {
+      setToken(pulledToken);
+    } else {
+      setToken(null);
+    }
+  });
   if (isLoading) return <Loader alt="Loading" src={LoadingSvg} />;
 
   return (
@@ -65,9 +75,13 @@ const PostDetails = ({ match }: any) => {
         {comments.map((comment) => (
           <Comment comment={comment} key={comment._id} />
         ))}
-        <AddCommentBtn onClick={toggleCommentForm}>
-          Dodaj komentarz
-        </AddCommentBtn>
+        {token ? (
+          <AddCommentBtn onClick={toggleCommentForm}>
+            Dodaj komentarz
+          </AddCommentBtn>
+        ) : (
+          ''
+        )}
       </CommentList>
       <CommentForm
         content={content}

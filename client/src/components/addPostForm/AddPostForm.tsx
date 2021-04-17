@@ -1,4 +1,5 @@
 import React, { ReactElement, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -14,6 +15,7 @@ import {
 } from './styles';
 
 export default function AddPostForm() {
+  const history = useHistory();
   const [details, setDetails] = useState({
     title: '',
     content: '',
@@ -46,6 +48,7 @@ export default function AddPostForm() {
           showConfirmButton: false,
           timer: 1500,
         });
+        history.push('/posts/1');
       })
       .catch((er) => {
         setError(er.response.data);

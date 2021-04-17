@@ -3,31 +3,43 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
+import useFetchTopHashtags from '../utils/useFetchTopHashtags';
+
 const FooterWrapper = styled.footer`
-  height: 30vh;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-
-  /* background: gray; */
 `;
 
 const Wrapper = styled.div`
-  width: 70%;
+  width: 80%;
   max-width: 1400px;
   border-top: 3px solid #c4c4c4;
   display: flex;
-  justify-content: space-around;
-  align-items: flex-start;
+
+  align-items: center;
+  flex-direction: column;
   padding-top: 30px;
+
+  @media (min-width: 500px) {
+    width: 70%;
+    flex-direction: row;
+    justify-content: space-around;
+  }
 `;
 
 const LinksContainer = styled.div`
-  width: 35%;
-  height: 60px;
+  width: 80%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+  min-width: 190px;
+
+  @media (min-width: 500px) {
+    width: 47%;
+  }
 `;
 
 const HashtagsContainer = styled(LinksContainer)`
@@ -68,51 +80,35 @@ const StyledNormalHashtag = styled(StyledLink)`
 const Sign = styled.h6`
   color: rgba(61, 68, 67, 0.6);
   font-weight: 400;
-  margin-top: 50px;
+  margin: 15px 0;
 `;
 
 const Footer: FC = () => {
-  const [hashtags, setHashtags] = useState([
-    'jedzenie',
-    'bilard',
-    'COVID',
-    'pzpn1',
-    'bilard1',
-    'COVID1',
-    'pzpn2',
-    'bilard2',
-    'COVID2',
-    'pzpn3',
-    'bilard3',
-  ]);
+  const hashtags = useFetchTopHashtags();
 
-  // useEffect(() => {
-  //   const fetchHashtags = async () => {
-  //     const = await axios.get('url');
+  const theBestHashtags = hashtags
+    .slice(0, 4)
+    .map((hashtag) => (
+      <StyledTheBestHashtag to={`/posts/ranking/${hashtag}/1`}>
+        {hashtag}
+      </StyledTheBestHashtag>
+    ));
 
-  //     setHashtags(result.data);
-  //   };
+  const mediumHashtags = hashtags
+    .slice(4, 7)
+    .map((hashtag) => (
+      <StyledMediumHashtag to={`/posts/ranking/${hashtag}/1`}>
+        {hashtag}
+      </StyledMediumHashtag>
+    ));
 
-  //   fetchHashtags();
-  // }, []);
-
-  const theBestHashtags = hashtags.slice(0, 4).map((hashtag) => (
-    <StyledTheBestHashtag key={hashtag} to={`url.../ranking/${hashtag}`}>
-      {hashtag}
-    </StyledTheBestHashtag>
-  ));
-
-  const mediumHashtags = hashtags.slice(4, 7).map((hashtag) => (
-    <StyledMediumHashtag key={hashtag} to={`url.../ranking/${hashtag}`}>
-      {hashtag}
-    </StyledMediumHashtag>
-  ));
-
-  const normalHashtags = hashtags.slice(7, 10).map((hashtag) => (
-    <StyledNormalHashtag key={hashtag} to={`url.../ranking/${hashtag}`}>
-      {hashtag}
-    </StyledNormalHashtag>
-  ));
+  const normalHashtags = hashtags
+    .slice(7, 10)
+    .map((hashtag) => (
+      <StyledNormalHashtag to={`/posts/ranking/${hashtag}/1`}>
+        {hashtag}
+      </StyledNormalHashtag>
+    ));
 
   const allHashtags = [
     theBestHashtags[0],
@@ -135,11 +131,6 @@ const Footer: FC = () => {
           <StyledLink to="/">Regulamin</StyledLink>
         </LinksContainer>
         <HashtagsContainer>
-          {/* {hashtags.map((hashtag) => (
-            <StyledLink key={hashtag} to={`url.../ranking/${hashtag}`}>
-              {hashtag}
-            </StyledLink>
-          ))} */}
           {allHashtags.map((hashtag) => hashtag)}
         </HashtagsContainer>
       </Wrapper>

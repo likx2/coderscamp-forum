@@ -1,4 +1,5 @@
 import React, { ReactElement, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import axios from 'axios';
 import styled from 'styled-components';
@@ -66,6 +67,7 @@ export default function LoginModal({
         console.log('Welcome!');
         localStorage.setItem('auth-token', result.headers['x-auth-token']);
         hide();
+        window.location.href = window.location.href;
       })
       .catch((er) => {
         // details incorrect
@@ -81,6 +83,7 @@ export default function LoginModal({
         // details correct
         console.log('Welcome!');
         toggle();
+        window.location.href = window.location.href;
       })
       .catch((er) => {
         // details incorrect

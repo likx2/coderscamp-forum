@@ -69,6 +69,7 @@
         "custom": "ignore"
       }
     ],
+    "no-self-assign":"off",
     "react/jsx-sort-props": "off",
     "react/jsx-uses-react": "off",
     "react/prop-types": "off",
@@ -76,10 +77,7 @@
     "react/state-in-constructor": ["error", "never"],
     "semi": "error",
     "object-curly-spacing": ["error", "always"],
-    "sort-imports": ["error", {
-      "ignoreCase": true,
-      "ignoreDeclarationSort": true
-    }],
+    "sort-imports": "off",
     "no-underscore-dangle":"off",
     "arrow-body-style":"off"
   },
